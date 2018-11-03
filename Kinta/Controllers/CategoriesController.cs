@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Helper;
 using Kinta.DAL;
 using Kinta.Models;
 using Kinta.Services;
@@ -32,8 +33,11 @@ namespace Kinta.Controllers
             //}
 
             //return b;
-
-            return CategoryDAL.Insert(obj);
+            var dal = new CategoryDAL();
+            obj.Id = IdHelper.NewGuid();
+            obj.CreatedTime = DateTime.Now;
+            obj.UpdatedTime = DateTime.Now;
+            return dal.Insert(obj);
         }
 
         [HttpGet]
