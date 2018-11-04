@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Common.Base
 {
-    //https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/local-transactions
+
     public abstract class DataBaseRepository<TEntity>
     {
         protected virtual string DbName { get { return DbConstant.KintaDb; } }
@@ -80,6 +80,23 @@ namespace Common.Base
             }
         }
 
+        private string GetUpdateFieldsQuery(List<string> updateFields)
+        {
+            string value = "";
+
+            foreach (var fldName in updateFields)
+            {
+                if (value.IsNotEmpty())
+                {
+                    value += ", ";
+                }
+                value += $"{fldName} = @{fldName}";
+            }
+            return $"UPDATE dbo.{TableName} SET {value} ,updated_time = @updated_time"
+                    + $"WHERE id = @id";
+
+        }
+
         public bool Insert(TEntity entity)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
@@ -89,12 +106,14 @@ namespace Common.Base
                     SqlCommand command = new SqlCommand(InsertQuery, connection);
                     foreach (var param in QueryParameter)
                     {
-                        command.Parameters.AddWithValue(param, entity.GetPropValue(DbFieldNames[param.Trim('@')]));
+                        var propName = DbFieldNames[param.Trim('@')];
+                        command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
                     }
 
                     connection.Open();
 
                     command.ExecuteNonQuery();
+
                     connection.Close();
                 }
                 catch (Exception ex)
@@ -104,6 +123,56 @@ namespace Common.Base
                 }
             }
             return true;
+        }
+
+        public bool UpdateFields(TEntity entity, params string[] propNames)
+        {
+            try
+            {
+                if (propNames.IsNullOrEmpty())
+                {
+                    throw new ArgumentNullException(nameof(propNames));
+                }
+
+                List<string> fieldUpdates = new List<string>();
+                foreach (var propName in propNames)
+                {
+                    fieldUpdates.Add(DbFieldNames.FirstOrDefault(x => x.Value == propName).Key);
+                }
+
+                var query = GetUpdateFieldsQuery(fieldUpdates);
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    try
+                    {
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@id", entity.GetPropValue("Id"));
+                        foreach (var param in fieldUpdates)
+                        {
+                            var propName = DbFieldNames[param.Trim('@')];
+                            command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
+                        }
+
+                        connection.Open();
+
+                        command.ExecuteNonQuery();
+
+                        connection.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        connection.Close();
+                        throw new Exception("" + ex);
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("" + ex);
+            }
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Common.Attribute;
+using Common.Models;
 using System;
 
 namespace Kinta.Models
@@ -29,11 +30,5 @@ namespace Kinta.Models
 
         [DbFieldName(FieldName = "tag")]
         public string Tag { get; set; }
-
-        [DbFieldName(FieldName = "created_time")]
-        public DateTime CreatedTime { get; set; }
-
-        [DbFieldName(FieldName = "updated_time")]
-        public DateTime UpdatedTime { get; set; }
     }
 }

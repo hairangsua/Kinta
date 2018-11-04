@@ -34,9 +34,12 @@ namespace Kinta.Controllers
 
             //return b;
             var dal = new CategoryDAL();
-            obj.Id = IdHelper.NewGuid();
+            obj.Id = "4aac68f2-9ebb-472c-9183-22dbfa962027";
             obj.CreatedTime = DateTime.Now;
             obj.UpdatedTime = DateTime.Now;
+
+            dal.UpdateFields(obj, nameof(CategoryModel.Name));
+
             return dal.Insert(obj);
         }
 
