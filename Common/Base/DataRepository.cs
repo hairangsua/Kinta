@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Reflection;
 using System.Text;
 using System.Linq;
+using Dapper;
 
 namespace Common.Base
 {
@@ -154,9 +155,7 @@ namespace Common.Base
                         }
 
                         connection.Open();
-
                         command.ExecuteNonQuery();
-
                         connection.Close();
                     }
                     catch (Exception ex)

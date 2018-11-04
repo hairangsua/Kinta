@@ -1,8 +1,7 @@
-﻿namespace Common
+﻿namespace Common.SQLFromExpression
 {
     public interface IProvider
     {
-        TableDefinition GetTableDefinitionFor<T>();
         string ValueToString(object value, bool quote);
     }
 }

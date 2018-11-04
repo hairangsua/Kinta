@@ -7,21 +7,22 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Common
+namespace Common.SQLFromExpression
 {
-    public class WhereBuilder
-    {
-        private readonly IProvider _provider;
-        private TableDefinition _tableDef;
 
-        public WhereBuilder(IProvider provider)
+    public class WhereBuilder<T>
+    {
+        //private readonly IProvider _provider;
+        private TableDefinition<T> _tableDef;
+
+        public WhereBuilder()
         {
-            _provider = provider;
+            //_provider = provider;
         }
 
-        public WherePart ToSql<T>(Expression<Func<T, bool>> expression)
+        public WherePart ToSql(Expression<Func<T, bool>> expression)
         {
-            _tableDef = _provider.GetTableDefinitionFor<T>();
+            _tableDef = new TableDefinition<T>();
             var i = 1;
             return Recurse(ref i, expression.Body, isUnary: true);
         }
@@ -124,18 +125,18 @@ namespace Common
             throw new Exception("Unsupported expression: " + expression.GetType().Name);
         }
 
-        public string ValueToString(object value, bool isUnary, bool quote)
-        {
-            if (value is bool)
-            {
-                if (isUnary)
-                {
-                    return (bool)value ? "(1=1)" : "(1=0)";
-                }
-                return (bool)value ? "1" : "0";
-            }
-            return _provider.ValueToString(value, quote);
-        }
+        //public string ValueToString(object value, bool isUnary, bool quote)
+        //{
+        //    if (value is bool)
+        //    {
+        //        if (isUnary)
+        //        {
+        //            return (bool)value ? "(1=1)" : "(1=0)";
+        //        }
+        //        return (bool)value ? "1" : "0";
+        //    }
+        //    return _provider.ValueToString(value, quote);
+        //}
 
         private static object GetValue(Expression member)
         {
@@ -191,67 +192,5 @@ namespace Common
         }
     }
 
-    public class WherePart
-    {
-        public string Sql { get; set; }
-        public Dictionary<string, object> Parameters { get; set; } = new Dictionary<string, object>();
 
-        public static WherePart IsSql(string sql)
-        {
-            return new WherePart()
-            {
-                Parameters = new Dictionary<string, object>(),
-                Sql = sql
-            };
-        }
-
-        public static WherePart IsParameter(int count, object value)
-        {
-            return new WherePart()
-            {
-                Parameters = { { count.ToString(), value } },
-                Sql = $"@{count}"
-            };
-        }
-
-        public static WherePart IsCollection(ref int countStart, IEnumerable values)
-        {
-            var parameters = new Dictionary<string, object>();
-            var sql = new StringBuilder("(");
-            foreach (var value in values)
-            {
-                parameters.Add((countStart).ToString(), value);
-                sql.Append($"@{countStart},");
-                countStart++;
-            }
-            if (sql.Length == 1)
-            {
-                sql.Append("null,");
-            }
-            sql[sql.Length - 1] = ')';
-            return new WherePart()
-            {
-                Parameters = parameters,
-                Sql = sql.ToString()
-            };
-        }
-
-        public static WherePart Concat(string @operator, WherePart operand)
-        {
-            return new WherePart()
-            {
-                Parameters = operand.Parameters,
-                Sql = $"({@operator} {operand.Sql})"
-            };
-        }
-
-        public static WherePart Concat(WherePart left, string @operator, WherePart right)
-        {
-            return new WherePart()
-            {
-                Parameters = left.Parameters.Union(right.Parameters).ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
-                Sql = $"({left.Sql} {@operator} {right.Sql})"
-            };
-        }
-    }
 }
