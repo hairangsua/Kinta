@@ -4,31 +4,31 @@ using System;
 
 namespace Kinta.Models
 {
-    [TableName("category")]
+    [DbName("category")]
     public class CategoryModel : BaseModel
     {
-        [DbFieldName(FieldName = "id")]
+        [DbColumn(FieldName = "id")]
         public string Id { get; set; }
 
-        [DbFieldName(FieldName = "code")]
+        [DbColumn(FieldName = "code")]
         public string Code { get; set; }
 
-        [DbFieldName(FieldName = "name")]
+        [DbColumn(FieldName = "name")]
         public string Name { get; set; }
 
-        [DbFieldName(FieldName = "description")]
+        [DbColumn(FieldName = "description")]
         public string Description { get; set; }
 
-        [DbFieldName(FieldName = "parent_code")]
+        [DbColumn(FieldName = "parent_code")]
         public string ParentCode { get; set; }
 
-        [DbFieldName(FieldName = "child_code")]
+        [DbColumn(FieldName = "child_code")]
         public string ChildCode { get; set; }
 
-        [DbFieldName(FieldName = "path")]
+        [DbColumn(FieldName = "path")]
         public string Path { get; set; }
 
-        [DbFieldName(FieldName = "tag")]
+        [DbColumn(FieldName = "tag")]
         public string Tag { get; set; }
     }
 }

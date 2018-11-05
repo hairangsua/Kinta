@@ -12,15 +12,15 @@ namespace Common.SQLFromExpression
         public string TableName { get; set; }
         public string GetColumnNameFor(string name)
         {
-            return DbFieldNames.FirstOrDefault(x => x.Value == name).Key;
+            return DbColumns.FirstOrDefault(x => x.Value == name).Key;
         }
 
         public TableDefinition()
         {
-            TableName = typeof(TEntity).GetAttributeValue((TableNameAttribute tbn) => tbn.TableName);
+            TableName = typeof(TEntity).GetAttributeValue((DbNameAttribute tbn) => tbn.Name);
         }
 
-        private Dictionary<string, string> DbFieldNames
+        private Dictionary<string, string> DbColumns
         {
             get
             {
@@ -32,7 +32,7 @@ namespace Common.SQLFromExpression
                     object[] attrs = prop.GetCustomAttributes(true);
                     foreach (object attr in attrs)
                     {
-                        DbFieldNameAttribute fieldName = attr as DbFieldNameAttribute;
+                        DbColumnAttribute fieldName = attr as DbColumnAttribute;
                         if (fieldName != null)
                         {
                             _dict.Add(fieldName.FieldName, prop.Name);

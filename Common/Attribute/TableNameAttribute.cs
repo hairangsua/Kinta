@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Common.Attribute
 {
-    public class TableNameAttribute : System.Attribute
+    public class DbNameAttribute : System.Attribute
     {
-        public string TableName { get; private set; }
+        public string Name { get; private set; }
 
-        public TableNameAttribute(string tableName)
+        public DbNameAttribute(string tableName)
         {
-            TableName = tableName;
+            Name = tableName;
         }
     }
 }

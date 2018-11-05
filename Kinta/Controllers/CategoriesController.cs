@@ -47,6 +47,8 @@ namespace Kinta.Controllers
         [Route("GetCategoryItems")]
         public ActionResult<List<CategoryModel>> GetAll()
         {
+            var dal = new CategoryDAL();
+            var a = dal.FindAll();
             return _service.GetAll();
         }
     }

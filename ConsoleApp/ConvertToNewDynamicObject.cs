@@ -9,7 +9,7 @@ namespace ConsoleApp
 {
     public class ConvertToNewDynamicObject<TEntity>
     {
-        private static Dictionary<string, string> DbFieldNames
+        private static Dictionary<string, string> DbColumns
         {
             get
             {
@@ -21,10 +21,10 @@ namespace ConsoleApp
                     object[] attrs = prop.GetCustomAttributes(true);
                     foreach (object attr in attrs)
                     {
-                        DbFieldNameAttribute fieldName = attr as DbFieldNameAttribute;
-                        if (fieldName != null)
+                        DbColumnAttribute dbCol = attr as DbColumnAttribute;
+                        if (dbCol != null)
                         {
-                            _dict.Add(fieldName.FieldName, prop.Name);
+                            _dict.Add(dbCol.FieldName, prop.Name);
                         }
                     }
                 }
@@ -36,9 +36,9 @@ namespace ConsoleApp
         public static object ConvertToDbNameObject(TEntity entity)
         {
             dynamic newObj = new { };
-            foreach (var key in DbFieldNames.Keys)
+            foreach (var key in DbColumns.Keys)
             {
-                var propName = DbFieldNames[key];
+                var propName = DbColumns[key];
                 newObj.SetPropValue(key, entity.GetPropValue(propName));
             }
             return newObj;

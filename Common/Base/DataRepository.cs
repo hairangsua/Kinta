@@ -9,31 +9,37 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using Dapper;
+using SqlKata.Compilers;
+using SqlKata;
+using SqlKata.Execution;
 
 namespace Common.Base
 {
 
-    public abstract class DataBaseRepository<TEntity>
+    public abstract class DataRepository<TEntity, TComplier> where TComplier : new()
+                                                             where TEntity : new()
     {
-        protected virtual string DbName { get { return DbConstant.KintaDb; } }
+        private TComplier _Complier { get { return new TComplier(); } }
 
-        private string ConnectionString
+        protected virtual string _DbName { get { return DbConstant.KintaDb; } }
+
+        private string _ConnectionString
         {
             get
             {
-                return DbConstant.SetConnectionString(DbName);
+                return DbConstant.SetConnectionString(_DbName);
             }
         }
 
-        private string TableName
+        private string _TableName
         {
             get
             {
-                return typeof(TEntity).GetAttributeValue((TableNameAttribute tbn) => tbn.TableName);
+                return typeof(TEntity).GetAttributeValue((DbNameAttribute tbn) => tbn.Name);
             }
         }
 
-        private Dictionary<string, string> DbFieldNames
+        private Dictionary<string, string> _DicDbColumn
         {
             get
             {
@@ -45,7 +51,7 @@ namespace Common.Base
                     object[] attrs = prop.GetCustomAttributes(true);
                     foreach (object attr in attrs)
                     {
-                        DbFieldNameAttribute fieldName = attr as DbFieldNameAttribute;
+                        DbColumnAttribute fieldName = attr as DbColumnAttribute;
                         if (fieldName != null)
                         {
                             _dict.Add(fieldName.FieldName, prop.Name);
@@ -57,13 +63,13 @@ namespace Common.Base
             }
         }
 
-        private List<string> QueryParameter
+        private List<string> _QueryParameter
         {
             get
             {
                 var rs = new List<string>();
 
-                foreach (var value in DbFieldNames.Keys)
+                foreach (var value in _DicDbColumn.Keys)
                 {
                     rs.Add($"@{value}");
                 }
@@ -72,12 +78,12 @@ namespace Common.Base
             }
         }
 
-        private string InsertQuery
+        private string _InsertQuery
         {
             get
             {
-                return $"INSERT INTO dbo.{TableName} ({string.Join(",", DbFieldNames.Keys)})"
-                      + $"VALUES ({string.Join(", ", QueryParameter)})";
+                return $"INSERT INTO dbo.{_TableName} ({string.Join(",", _DicDbColumn.Keys)})"
+                      + $"VALUES ({string.Join(", ", _QueryParameter)})";
             }
         }
 
@@ -93,21 +99,21 @@ namespace Common.Base
                 }
                 value += $"{fldName} = @{fldName}";
             }
-            return $"UPDATE dbo.{TableName} SET {value} ,updated_time = @updated_time"
+            return $"UPDATE dbo.{_TableName} SET {value} ,updated_time = @updated_time"
                     + $"WHERE id = @id";
 
         }
 
         public bool Insert(TEntity entity)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (SqlConnection connection = new SqlConnection(_ConnectionString))
             {
                 try
                 {
-                    SqlCommand command = new SqlCommand(InsertQuery, connection);
-                    foreach (var param in QueryParameter)
+                    SqlCommand command = new SqlCommand(_InsertQuery, connection);
+                    foreach (var param in _QueryParameter)
                     {
-                        var propName = DbFieldNames[param.Trim('@')];
+                        var propName = _DicDbColumn[param.Trim('@')];
                         command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
                     }
 
@@ -138,11 +144,11 @@ namespace Common.Base
                 List<string> fieldUpdates = new List<string>();
                 foreach (var propName in propNames)
                 {
-                    fieldUpdates.Add(DbFieldNames.FirstOrDefault(x => x.Value == propName).Key);
+                    fieldUpdates.Add(_DicDbColumn.FirstOrDefault(x => x.Value == propName).Key);
                 }
 
                 var query = GetUpdateFieldsQuery(fieldUpdates);
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                using (SqlConnection connection = new SqlConnection(_ConnectionString))
                 {
                     try
                     {
@@ -150,7 +156,7 @@ namespace Common.Base
                         command.Parameters.AddWithValue("@id", entity.GetPropValue("Id"));
                         foreach (var param in fieldUpdates)
                         {
-                            var propName = DbFieldNames[param.Trim('@')];
+                            var propName = _DicDbColumn[param.Trim('@')];
                             command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
                         }
 
@@ -170,6 +176,40 @@ namespace Common.Base
             {
 
                 throw new Exception("" + ex);
+            }
+
+        }
+
+        public List<TEntity> FindAll()
+        {
+            using (SqlConnection connection = new SqlConnection(_ConnectionString))
+            {
+                try
+                {
+                    var db = new QueryFactory(connection, _Complier as Compiler);
+
+                    var dynRs = db.Query(_TableName).Get();
+
+                    var rs = new List<TEntity>();
+                    foreach (var item in dynRs)
+                    {
+                        var obj = new TEntity();
+                        foreach (var key in _DicDbColumn.Keys)
+                        {
+                            var b = item.GetType().GetProperty(key).GetValue(item, null);
+                            var propName = _DicDbColumn[key];
+                            obj.SetPropValue(propName, item.GetPropValue(key) as object);
+                        }
+                        rs.Add(obj);
+                    }
+
+                    return rs;
+                }
+                catch (Exception ex)
+                {
+                    connection.Close();
+                    throw new Exception("" + ex);
+                }
             }
 
         }

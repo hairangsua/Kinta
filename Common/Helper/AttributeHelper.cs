@@ -23,7 +23,7 @@ namespace Common.Helper
         }
 
 
-        //private Dictionary<string, string> GetDbFieldNames()
+        //private Dictionary<string, string> GetDbColumns()
         //{
         //    Dictionary<string, string> _dict = new Dictionary<string, string>();
 
@@ -33,7 +33,7 @@ namespace Common.Helper
         //        object[] attrs = prop.GetCustomAttributes(true);
         //        foreach (object attr in attrs)
         //        {
-        //            DbFieldNameAttribute fieldName = attr as DbFieldNameAttribute;
+        //            DbColumnAttribute fieldName = attr as DbColumnAttribute;
         //            if (fieldName != null)
         //            {
         //                _dict.Add(prop.Name, fieldName.FieldName);

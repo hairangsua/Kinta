@@ -7,10 +7,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using SqlKata.Compilers;
 
 namespace Kinta.DAL
 {
-    public class CategoryDAL : DataBaseRepository<CategoryModel>
+    public class CategoryDAL : DataRepository<CategoryModel, SqlServerCompiler>
     {
     }
 }

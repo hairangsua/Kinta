@@ -8,7 +8,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            TestWhereBuilder.use();
+            TestSqlKata.Test();
         }
     }
 }

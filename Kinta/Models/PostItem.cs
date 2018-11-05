@@ -21,9 +21,5 @@ namespace Kinta.Models
         public string Url { get; set; }
 
         public string Tag { get; set; }
-
-        public DateTime CreatedTime { get; set; }
-
-        public DateTime UpdatedTime { get; set; }
     }
 }

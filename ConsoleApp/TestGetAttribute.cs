@@ -9,7 +9,7 @@ namespace ConsoleApp
 {
     class TestGetAttribute
     {
-        public static Dictionary<string, string> GetDbFieldNames()
+        public static Dictionary<string, string> GetDbColumns()
         {
             Dictionary<string, string> _dict = new Dictionary<string, string>();
 
@@ -19,7 +19,7 @@ namespace ConsoleApp
                 object[] attrs = prop.GetCustomAttributes(true);
                 foreach (object attr in attrs)
                 {
-                    DbFieldNameAttribute fieldName = attr as DbFieldNameAttribute;
+                    DbColumnAttribute fieldName = attr as DbColumnAttribute;
                     if (fieldName != null)
                     {
                         _dict.Add(prop.Name, fieldName.FieldName);
