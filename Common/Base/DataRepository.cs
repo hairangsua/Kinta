@@ -12,6 +12,7 @@ using Dapper;
 using SqlKata.Compilers;
 using SqlKata;
 using SqlKata.Execution;
+using System.Linq.Expressions;
 
 namespace Common.Base
 {
@@ -20,6 +21,14 @@ namespace Common.Base
                                                              where TEntity : new()
     {
         private TComplier _Complier { get { return new TComplier(); } }
+
+        public Query QueryInstance
+        {
+            get
+            {
+                return new Query(_TableName);
+            }
+        }
 
         protected virtual string _DbName { get { return DbConstant.KintaDb; } }
 
@@ -57,6 +66,11 @@ namespace Common.Base
                             _dict.Add(fieldName.FieldName, prop.Name);
                         }
                     }
+                }
+
+                if (_dict.IsNullOrEmpty())
+                {
+                    throw new Exception(nameof(_dict));
                 }
 
                 return _dict;
@@ -180,7 +194,7 @@ namespace Common.Base
 
         }
 
-        public List<TEntity> FindAll()
+        private List<TEntity> FindAllWithSpecifyPropName(params string[] propNames)
         {
             using (SqlConnection connection = new SqlConnection(_ConnectionString))
             {
@@ -190,20 +204,7 @@ namespace Common.Base
 
                     var dynRs = db.Query(_TableName).Get();
 
-                    var rs = new List<TEntity>();
-                    foreach (var item in dynRs)
-                    {
-                        var obj = new TEntity();
-                        foreach (var key in _DicDbColumn.Keys)
-                        {
-                            var b = item.GetType().GetProperty(key).GetValue(item, null);
-                            var propName = _DicDbColumn[key];
-                            obj.SetPropValue(propName, item.GetPropValue(key) as object);
-                        }
-                        rs.Add(obj);
-                    }
-
-                    return rs;
+                    return db.Query(_TableName).Select(GetColumnWithAlias(propNames.ToList())) as List<TEntity>;
                 }
                 catch (Exception ex)
                 {
@@ -211,7 +212,56 @@ namespace Common.Base
                     throw new Exception("" + ex);
                 }
             }
+        }
 
+        public List<TEntity> FindAll()
+        {
+            return FindAllWithSpecifyPropName(_DicDbColumn.Values.ToArray());
+        }
+
+        public List<TEntity> FindAllByExps(params Expression<Func<TEntity, string>>[] expresstions)
+        {
+            var propNames = new List<string>();
+            foreach (var e in expresstions)
+            {
+                MemberExpression memberExpression = (MemberExpression)e.Body;
+                propNames.Add((string)memberExpression.GetPropValue(nameof(MemberExpression.Member)).GetPropValue("Name"));
+            }
+            return FindAllWithSpecifyPropName(propNames.ToArray());
+        }
+
+        public List<TEntity> Find(Query where)
+        {
+
+            using (SqlConnection connection = new SqlConnection(_ConnectionString))
+            {
+                try
+                {
+                    var db = new QueryFactory(connection, _Complier as Compiler);
+
+                    return db.FromQuery(QueryInstance.Where(where)) as List<TEntity>;
+                }
+                catch (Exception ex)
+                {
+                    connection.Close();
+                    throw new Exception("" + ex);
+                }
+            }
+        }
+
+        private string[] GetColumnWithAlias(List<string> propNames)
+        {
+            var lstColWithAlias = new List<string>();
+
+            foreach (var key in _DicDbColumn.Keys)
+            {
+                if (propNames.Contains(_DicDbColumn[key]))
+                {
+                    lstColWithAlias.Add($"{key} as {_DicDbColumn[key]}");
+                }
+            }
+
+            return lstColWithAlias.ToArray();
         }
     }
 }

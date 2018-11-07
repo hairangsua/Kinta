@@ -48,7 +48,7 @@ namespace Kinta.Controllers
         public ActionResult<List<CategoryModel>> GetAll()
         {
             var dal = new CategoryDAL();
-            var a = dal.FindAll();
+            var a = dal.FindAllByExps(x => x.ChildCode, x => x.Code);
             return _service.GetAll();
         }
     }
