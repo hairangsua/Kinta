@@ -1,4 +1,5 @@
 ﻿using Common.Attribute;
+using Common.Helper;
 using Kinta.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace ConsoleApp
 {
-    class TestGetAttribute
+    public class TestAttribute
     {
         public static Dictionary<string, string> GetDbColumns()
         {
@@ -28,6 +29,41 @@ namespace ConsoleApp
             }
 
             return _dict;
+        }
+
+        [RegisterInfo]
+        public class TestModel
+        {
+            public string Code { get; set; }
+        }
+
+        public static IEnumerable<Type> GetClassByAttribute()
+        {
+            try
+            {
+                var rs = AttributeHelper.GetTypesWithHelpAttribute(Assembly.GetExecutingAssembly(), typeof(RegisterInfoAttribute));
+
+                var a = GetTypesWithHelpAttribute(Assembly.GetExecutingAssembly());
+
+                return rs;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        static IEnumerable<Type> GetTypesWithHelpAttribute(Assembly assembly)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.GetCustomAttributes(typeof(RegisterInfoAttribute), true).Length > 0)
+                {
+                    yield return type;
+                }
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ using System;
 
 namespace Kinta.Models
 {
-    [DbName("category")]
+    [DbName("category"), RegisterInfo]
     public class CategoryModel : BaseModel
     {
         [DbColumn(FieldName = "id")]

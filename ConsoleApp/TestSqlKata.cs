@@ -24,11 +24,11 @@ namespace ConsoleApp
 
         public static void CreateQuery()
         {
-            var q = Query<CategoryModel, MySqlCompiler>.Create();
+            //var q = Query<CategoryModel, MySqlCompiler>.Create();
 
-            var connection = new SqlConnection("...");
-            var compiler = new MySqlCompiler();
-            var db = new QueryFactory(connection, compiler);
+            //var connection = new SqlConnection("...");
+            //var compiler = new MySqlCompiler();
+            //var db = new QueryFactory(connection, compiler);
             
         }
     }

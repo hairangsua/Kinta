@@ -13,39 +13,39 @@ namespace Common.SQLKataExtension
 
     }
 
-    public class Query<TEntity, TComplier> : Query where TComplier : new()
-    {
-        private TComplier Complier { get { return new TComplier(); } }
+    //public class Query<TEntity, TComplier> : Query where TComplier : new()
+    //{
+    //    private TComplier Complier { get { return new TComplier(); } }
 
-        public static Query Create()
-        {
-            var tableName = typeof(TEntity).GetAttributeValue((DbNameAttribute tbn) => tbn.Name);
-            return new Query(tableName);
-        }
+    //    public static Query Create()
+    //    {
+    //        var tableName = typeof(TEntity).GetAttributeValue((DbNameAttribute tbn) => tbn.Name);
+    //        return new Query(tableName);
+    //    }
 
-        #region private methor
+    //    #region private methor
 
-        private Dictionary<string, string> GetDbColumns()
-        {
-            Dictionary<string, string> _dict = new Dictionary<string, string>();
+    //    private Dictionary<string, string> GetDbColumns()
+    //    {
+    //        Dictionary<string, string> _dict = new Dictionary<string, string>();
 
-            PropertyInfo[] props = typeof(TEntity).GetProperties();
-            foreach (PropertyInfo prop in props)
-            {
-                object[] attrs = prop.GetCustomAttributes(true);
-                foreach (object attr in attrs)
-                {
-                    DbColumnAttribute fieldName = attr as DbColumnAttribute;
-                    if (fieldName != null)
-                    {
-                        _dict.Add(fieldName.FieldName, prop.Name);
-                    }
-                }
-            }
+    //        PropertyInfo[] props = typeof(TEntity).GetProperties();
+    //        foreach (PropertyInfo prop in props)
+    //        {
+    //            object[] attrs = prop.GetCustomAttributes(true);
+    //            foreach (object attr in attrs)
+    //            {
+    //                DbColumnAttribute fieldName = attr as DbColumnAttribute;
+    //                if (fieldName != null)
+    //                {
+    //                    _dict.Add(fieldName.FieldName, prop.Name);
+    //                }
+    //            }
+    //        }
 
-            return _dict;
-        }
-        #endregion
+    //        return _dict;
+    //    }
+    //    #endregion
 
-    }
+    //}
 }

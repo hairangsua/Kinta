@@ -9,7 +9,7 @@ namespace Common.Helper
     {
         public static string NewGuid()
         {
-            return Guid.NewGuid().ToString().Trim('-');
+            return Guid.NewGuid().ToString();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Reflection;
 
 namespace Common.Helper
 {
@@ -22,6 +23,16 @@ namespace Common.Helper
             return default(TValue);
         }
 
+        public static IEnumerable<Type> GetTypesWithHelpAttribute(Assembly assembly, Type typeOfAttribute)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.GetCustomAttributes(typeOfAttribute, true).Length > 0)
+                {
+                    yield return type;
+                }
+            }
+        }
 
         //private Dictionary<string, string> GetDbColumns()
         //{

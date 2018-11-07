@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Common.Attribute;
 using Kinta.Models;
+using Kinta.ServiceConfiguration;
 using Kinta.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +24,7 @@ namespace Kinta
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSingleton<IService<CategoryModel>, CategoriesService>();
+            services.AddSingleton<IService<PostItemModel>, PostItemsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,25 +1,25 @@
 ﻿using Common.Attribute;
 using Common.Constant;
 using Common.Helper;
+using Common.Models;
 using Kinta.Common;
+using SqlKata;
+using SqlKata.Compilers;
+using SqlKata.Execution;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Reflection;
-using System.Text;
 using System.Linq;
-using Dapper;
-using SqlKata.Compilers;
-using SqlKata;
-using SqlKata.Execution;
 using System.Linq.Expressions;
-
 namespace Common.Base
 {
 
-    public abstract class DataRepository<TEntity, TComplier> where TComplier : new()
+    public abstract class DataRepository<TEntity, TComplier>
+                                                             where TComplier : new()
                                                              where TEntity : new()
     {
+        #region properties
+
         private TComplier _Complier { get { return new TComplier(); } }
 
         public Query QueryInstance
@@ -52,28 +52,7 @@ namespace Common.Base
         {
             get
             {
-                Dictionary<string, string> _dict = new Dictionary<string, string>();
-
-                PropertyInfo[] props = typeof(TEntity).GetProperties();
-                foreach (PropertyInfo prop in props)
-                {
-                    object[] attrs = prop.GetCustomAttributes(true);
-                    foreach (object attr in attrs)
-                    {
-                        DbColumnAttribute fieldName = attr as DbColumnAttribute;
-                        if (fieldName != null)
-                        {
-                            _dict.Add(fieldName.FieldName, prop.Name);
-                        }
-                    }
-                }
-
-                if (_dict.IsNullOrEmpty())
-                {
-                    throw new Exception(nameof(_dict));
-                }
-
-                return _dict;
+                return DataRepositoryHelper.GetDicDbColumnName<TEntity>();
             }
         }
 
@@ -101,22 +80,12 @@ namespace Common.Base
             }
         }
 
-        private string GetUpdateFieldsQuery(List<string> updateFields)
+        private SqlConnection _Connection
         {
-            string value = "";
-
-            foreach (var fldName in updateFields)
-            {
-                if (value.IsNotEmpty())
-                {
-                    value += ", ";
-                }
-                value += $"{fldName} = @{fldName}";
-            }
-            return $"UPDATE dbo.{_TableName} SET {value} ,updated_time = @updated_time"
-                    + $"WHERE id = @id";
-
+            get { return new SqlConnection(_ConnectionString); }
         }
+
+        #endregion
 
         public bool Insert(TEntity entity)
         {
@@ -128,7 +97,14 @@ namespace Common.Base
                     foreach (var param in _QueryParameter)
                     {
                         var propName = _DicDbColumn[param.Trim('@')];
-                        command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
+                        if (propName == nameof(IEditTime.CreatedTime) || propName == nameof(IEditTime.UpdatedTime))
+                        {
+                            command.Parameters.AddWithValue(param, DateTime.Now);
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
+                        }
                     }
 
                     connection.Open();
@@ -146,8 +122,12 @@ namespace Common.Base
             return true;
         }
 
-        public bool UpdateFields(TEntity entity, params string[] propNames)
+        public bool UpdateFields(TEntity entity, string[] propNames)
         {
+            if (propNames.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(propNames));
+            }
             try
             {
                 if (propNames.IsNullOrEmpty())
@@ -161,7 +141,7 @@ namespace Common.Base
                     fieldUpdates.Add(_DicDbColumn.FirstOrDefault(x => x.Value == propName).Key);
                 }
 
-                var query = GetUpdateFieldsQuery(fieldUpdates);
+                var query = DataRepositoryHelper.GetUpdateFieldsQuery(fieldUpdates, _TableName);
                 using (SqlConnection connection = new SqlConnection(_ConnectionString))
                 {
                     try
@@ -171,7 +151,14 @@ namespace Common.Base
                         foreach (var param in fieldUpdates)
                         {
                             var propName = _DicDbColumn[param.Trim('@')];
-                            command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
+                            if (propName == nameof(IEditTime.UpdatedTime))
+                            {
+                                command.Parameters.AddWithValue(param, DateTime.Now);
+                            }
+                            else
+                            {
+                                command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
+                            }
                         }
 
                         connection.Open();
@@ -189,28 +176,36 @@ namespace Common.Base
             catch (Exception ex)
             {
 
-                throw new Exception("" + ex);
+                throw ex;
             }
 
         }
 
+        public bool UpdateFields(TEntity entity, params Expression<Func<TEntity, string>>[] expresstions)
+        {
+            var propNames = new List<string>();
+            foreach (var e in expresstions)
+            {
+                MemberExpression memberExpression = (MemberExpression)e.Body;
+                propNames.Add((string)memberExpression.GetPropValue(nameof(MemberExpression.Member)).GetPropValue("Name"));
+            }
+            return UpdateFields(entity, propNames.ToArray());
+        }
+
         private List<TEntity> FindAllWithSpecifyPropName(params string[] propNames)
         {
-            using (SqlConnection connection = new SqlConnection(_ConnectionString))
+            if (propNames.IsNullOrEmpty())
             {
-                try
-                {
-                    var db = new QueryFactory(connection, _Complier as Compiler);
-
-                    var dynRs = db.Query(_TableName).Get();
-
-                    return db.Query(_TableName).Select(GetColumnWithAlias(propNames.ToList())) as List<TEntity>;
-                }
-                catch (Exception ex)
-                {
-                    connection.Close();
-                    throw new Exception("" + ex);
-                }
+                throw new ArgumentNullException(nameof(propNames));
+            }
+            try
+            {
+                var queryFactory = new QueryFactory(_Connection, _Complier as Compiler);
+                return queryFactory.Get<TEntity>(QueryInstance.Select(DataRepositoryHelper.GetColumnWithAlias(propNames.ToList(), _DicDbColumn))).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -219,7 +214,7 @@ namespace Common.Base
             return FindAllWithSpecifyPropName(_DicDbColumn.Values.ToArray());
         }
 
-        public List<TEntity> FindAllByExps(params Expression<Func<TEntity, string>>[] expresstions)
+        public List<TEntity> FindAllWithSpecifyColumnByExps(params Expression<Func<TEntity, string>>[] expresstions)
         {
             var propNames = new List<string>();
             foreach (var e in expresstions)
@@ -230,38 +225,23 @@ namespace Common.Base
             return FindAllWithSpecifyPropName(propNames.ToArray());
         }
 
-        public List<TEntity> Find(Query where)
+        public List<TEntity> Find(Query query)
         {
-
-            using (SqlConnection connection = new SqlConnection(_ConnectionString))
+            try
             {
-                try
-                {
-                    var db = new QueryFactory(connection, _Complier as Compiler);
+                var db = new QueryFactory(_Connection, _Complier as Compiler);
 
-                    return db.FromQuery(QueryInstance.Where(where)) as List<TEntity>;
-                }
-                catch (Exception ex)
-                {
-                    connection.Close();
-                    throw new Exception("" + ex);
-                }
+                return db.Get<TEntity>(query).ToList();
             }
-        }
-
-        private string[] GetColumnWithAlias(List<string> propNames)
-        {
-            var lstColWithAlias = new List<string>();
-
-            foreach (var key in _DicDbColumn.Keys)
+            catch (Exception ex)
             {
-                if (propNames.Contains(_DicDbColumn[key]))
-                {
-                    lstColWithAlias.Add($"{key} as {_DicDbColumn[key]}");
-                }
+                throw new Exception("" + ex);
             }
 
-            return lstColWithAlias.ToArray();
+            //using (SqlConnection connection = new SqlConnection(_ConnectionString))
+            //{
+
+            //}
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            TestSqlKata.Test();
+            TestAttribute.GetClassByAttribute();
         }
     }
 }
