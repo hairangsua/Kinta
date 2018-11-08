@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Reflection;
 
-namespace Common.Helper
+namespace Kinta.Common.Helper
 {
     public static partial class AttributeHelper
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Attribute
+namespace Kinta.Domain.Attributes
 {
     public class DbColumnAttribute : System.Attribute
     {

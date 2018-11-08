@@ -8,7 +8,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            TestAttribute.GetClassByAttribute();
+            TestHashSet.ListHashSetPerformanceBenchmark();
         }
     }
 }

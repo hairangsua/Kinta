@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Collections;
 
-namespace Kinta.Common
+namespace Kinta.Common.Helper
 {
     public static partial class CollectionHelper
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Kinta.Common;
 
-namespace Common.Helper
+namespace Kinta.Common.Helper
 {
     public static partial class IdHelper
     {

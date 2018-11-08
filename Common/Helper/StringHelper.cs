@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kinta.Common
+namespace Kinta.Common.Helper
 {
     public static partial class StringHelper
     {

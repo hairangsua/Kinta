@@ -1,9 +1,9 @@
-﻿using Common.Attribute;
+﻿using Kinta.Domain.Attributes;
 using System;
 
-namespace Common.Models
+namespace Kinta.Domain.Entities
 {
-    public abstract class BaseModel : IEditTime
+    public abstract class BaseEntity : IEditTime
     {
         [DbColumn(FieldName = "created_time")]
         public DateTime CreatedTime { get; set; }

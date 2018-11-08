@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Helper
+namespace Kinta.Common.Helper
 {
     public static partial class BooleanHelper
     {

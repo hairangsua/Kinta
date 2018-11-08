@@ -1,9 +1,6 @@
-﻿using Common.Attribute;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
-namespace Common.Models
+namespace Kinta.Domain.Entities
 {
     public interface IEditTime
     {

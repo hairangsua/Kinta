@@ -1,12 +1,4 @@
-﻿using Common.Attribute;
-using Common.Helper;
-using SqlKata;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-
-namespace Common.SQLKataExtension
+﻿namespace Common.SQLKataExtension
 {
     public static class SqlKataExtension
     {

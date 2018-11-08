@@ -1,11 +1,9 @@
-﻿using Common.Attribute;
-using Common.Models;
-using System;
+﻿using Kinta.Domain.Attributes;
 
-namespace Kinta.Models
+namespace Kinta.Domain.Entities
 {
     [DbName("category"), RegisterInfo]
-    public class CategoryModel : BaseModel
+    public class CategoryEntity : BaseEntity
     {
         [DbColumn(FieldName = "id")]
         public string Id { get; set; }
@@ -30,5 +28,6 @@ namespace Kinta.Models
 
         [DbColumn(FieldName = "tag")]
         public string Tag { get; set; }
+
     }
 }

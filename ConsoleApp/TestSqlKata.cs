@@ -1,12 +1,5 @@
-﻿using Kinta.Models;
-using SqlKata;
+﻿using SqlKata;
 using SqlKata.Compilers;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Common.SQLKataExtension;
-using System.Data.SqlClient;
-using SqlKata.Execution;
 
 namespace ConsoleApp
 {

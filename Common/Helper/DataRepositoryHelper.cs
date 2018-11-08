@@ -1,11 +1,9 @@
-﻿using Common.Attribute;
-using Kinta.Common;
+﻿using Kinta.Domain.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
-namespace Common.Helper
+namespace Kinta.Common.Helper
 {
     public static partial class DataRepositoryHelper
     {

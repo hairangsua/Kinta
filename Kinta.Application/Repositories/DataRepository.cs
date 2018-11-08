@@ -1,8 +1,7 @@
-﻿using Common.Attribute;
-using Common.Constant;
-using Common.Helper;
-using Common.Models;
-using Kinta.Common;
+﻿using Common.Constant;
+using Kinta.Common.Helper;
+using Kinta.Domain.Attributes;
+using Kinta.Domain.Entities;
 using SqlKata;
 using SqlKata.Compilers;
 using SqlKata.Execution;
@@ -11,7 +10,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
-namespace Common.Base
+
+namespace Kinta.Application.Repositories
 {
 
     public abstract class DataRepository<TEntity, TComplier>
@@ -237,11 +237,6 @@ namespace Common.Base
             {
                 throw new Exception("" + ex);
             }
-
-            //using (SqlConnection connection = new SqlConnection(_ConnectionString))
-            //{
-
-            //}
         }
     }
 }

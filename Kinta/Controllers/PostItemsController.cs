@@ -1,5 +1,4 @@
-﻿using Kinta.Models;
-using Kinta.Services;
+﻿using Kinta.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 

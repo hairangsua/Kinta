@@ -1,14 +1,9 @@
-﻿using Common.Attribute;
-using Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Kinta.Domain.Attributes;
 
-namespace Kinta.Models
+namespace Kinta.Domain.Entities
 {
     [DbName("post_item"), RegisterInfo]
-    public class PostItemModel : BaseModel
+    public class PostItemEntity : BaseEntity
     {
         [DbColumn(FieldName = "id")]
         public string Id { get; set; }

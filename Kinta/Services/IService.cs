@@ -7,6 +7,7 @@ namespace Kinta.Services
 {
     public interface IService<TEntity>
     {
+        Query QueryInstance { get; }
         bool Insert(TEntity instance);
         bool UpdateFields(TEntity entity, string[] propNames);
         bool UpdateFields(TEntity entity, params Expression<Func<TEntity, string>>[] expresstions);
