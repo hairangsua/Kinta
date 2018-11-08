@@ -10,16 +10,13 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 
-namespace Kinta.Application.Repositories
+namespace Kinta.Persistence.Repositories
 {
-
-    public abstract class DataRepository<TEntity, TComplier>
-                                                             where TComplier : new()
-                                                             where TEntity : new()
+    public abstract class BaseRepository<TEntity, TComplier> where TComplier : new()
+                                                    where TEntity : new()
     {
-        #region properties
-
         private TComplier _Complier { get { return new TComplier(); } }
 
         public Query QueryInstance
@@ -30,7 +27,7 @@ namespace Kinta.Application.Repositories
             }
         }
 
-        protected virtual string _DbName { get { return DbConstant.KintaDb; } }
+        protected virtual string _DbName { get { return ""; } }
 
         private string _ConnectionString
         {
@@ -84,8 +81,6 @@ namespace Kinta.Application.Repositories
         {
             get { return new SqlConnection(_ConnectionString); }
         }
-
-        #endregion
 
         public bool Insert(TEntity entity)
         {
