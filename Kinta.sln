@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{24BE6FA1-6069-4789-96CE-551B86D0A13B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta", "Kinta\Kinta.csproj", "{698CC110-F5CB-4517-8925-2D837AD773CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta.Web", "Kinta\Kinta.Web.csproj", "{698CC110-F5CB-4517-8925-2D837AD773CF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta.Common", "Common\Kinta.Common.csproj", "{0BBECB6A-C35B-4665-8F53-BDC20EBC8125}"
 EndProject
@@ -15,17 +15,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{0DAEFAF1-D1F7-474B-9B39-F473C748C09A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinta.Domain", "Kinta.Domain\Kinta.Domain.csproj", "{CB9C81E6-EF48-4A40-A288-2337F600474A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta.Domain", "Kinta.Domain\Kinta.Domain.csproj", "{CB9C81E6-EF48-4A40-A288-2337F600474A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{4189E59D-4E94-4661-BDAE-4F42A87C68E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinta.Application", "Kinta.Application\Kinta.Application.csproj", "{E3292E18-3902-4DDD-9BC1-6DAC8465379C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta.Application", "Kinta.Application\Kinta.Application.csproj", "{E3292E18-3902-4DDD-9BC1-6DAC8465379C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{40B92155-C9A9-4F06-81F3-B59C35020EAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinta.Infrastructure", "Kinta.Infrastructure\Kinta.Infrastructure.csproj", "{FE36485B-89C1-4267-9B2A-F5372FC00047}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta.Infrastructure", "Kinta.Infrastructure\Kinta.Infrastructure.csproj", "{FE36485B-89C1-4267-9B2A-F5372FC00047}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinta.Persistence", "Kinta.Persistence\Kinta.Persistence.csproj", "{C91C16BF-502E-469E-A0B9-366D312D9476}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta.Persistence", "Kinta.Persistence\Kinta.Persistence.csproj", "{C91C16BF-502E-469E-A0B9-366D312D9476}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{988D7442-E98E-44AA-BF71-A9FA468EEE51}"
 EndProject

@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Common.Base;
-using Kinta.Models;
+﻿using Kinta.Application.Models;
+using Kinta.Persistence.Repositories;
 using SqlKata;
 using SqlKata.Compilers;
 
 namespace Kinta.Services
 {
-    public class PostItemsService : DataRepository<PostItemModel, SqlServerCompiler>, IService<PostItemModel>
+    public class PostItemsService : BaseRepository<PostItemModel, SqlServerCompiler>, IService<PostItemModel>
     {
         Query IService<PostItemModel>.QueryInstance => QueryInstance;
     }
