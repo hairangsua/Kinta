@@ -1,9 +1,11 @@
 ﻿using Kinta.Domain.Attributes;
+using Kinta.Domain.Entities;
+using System;
 
-namespace Kinta.Domain.Entities
+namespace Kinta.Models.Entities
 {
     [DbName("post_item"), RegisterInfo]
-    public class PostItemEntity : BaseEntity
+    public class PostItemModel : BaseModel
     {
         [DbColumn(FieldName = "id")]
         public string Id { get; set; }
@@ -25,5 +27,11 @@ namespace Kinta.Domain.Entities
 
         [DbColumn(FieldName = "tag")]
         public string Tag { get; set; }
+
+        [DbColumn(FieldName = "created_time")]
+        public DateTime CreatedTime { get; set; }
+
+        [DbColumn(FieldName = "updated_time")]
+        public DateTime UpdatedTime { get; set; }
     }
 }

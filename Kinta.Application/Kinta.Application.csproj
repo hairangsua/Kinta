@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Categories\Commands\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="PostItems\Commands\" />
-    <Folder Include="PostItems\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Kinta.Common.csproj" />
     <ProjectReference Include="..\Kinta.Domain\Kinta.Domain.csproj" />
+    <ProjectReference Include="..\Kinta.Models\Kinta.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

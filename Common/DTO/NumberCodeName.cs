@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Kinta.Domain.Entities.BaseEntity
+namespace Kinta.Common.DTO
 {
-    public class StringCodeName
+    public class NumberCodeName
     {
-        public string Code { get; set; }
+        public int Code { get; set; }
         public string Name { get; set; }
 
-        public StringCodeName(string code, string name)
+        public NumberCodeName(int code, string name)
         {
             Code = code;
             Name = name;

@@ -14,7 +14,7 @@ using System.Linq.Expressions;
 namespace Kinta.Persistence.Repositories
 {
 
-    public class SQLServerReposiory<TEntity> : BaseRepository<TEntity, SqlServerCompiler> where TEntity : new()
+    public class SQLServerReposiory<TEntity> : BaseRepository_ver1<TEntity, SqlServerCompiler> where TEntity : new()
     {
 
 

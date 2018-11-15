@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Kinta.Common.csproj" />
-    <ProjectReference Include="..\Kinta.Domain\Kinta.Domain.csproj" />
+    <ProjectReference Include="..\Kinta.Application\Kinta.Application.csproj" />
   </ItemGroup>
 
 </Project>

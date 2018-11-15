@@ -1,94 +1,64 @@
-﻿using Common.Constant;
-using Kinta.Common.Helper;
-using Kinta.Domain.Attributes;
-using Kinta.Domain.Entities;
-using SqlKata;
-using SqlKata.Compilers;
-using SqlKata.Execution;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
+using Kinta.Common.Helper;
+using Kinta.Domain.Attributes;
+using SqlKata;
+using SqlKata.Execution;
 
 namespace Kinta.Persistence.Repositories
 {
-    public abstract class BaseRepository<TEntity, TComplier> where TComplier : new()
-                                                    where TEntity : new()
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : new()
     {
-        private TComplier _Complier { get { return new TComplier(); } }
+        private IUnitOfWork _uow;
 
-        public Query QueryInstance
+        public BaseRepository()
         {
-            get
-            {
-                return new Query(_TableName);
-            }
+
+        }
+        private Dictionary<string, string> _dicColumnName;
+        private string _tableName;
+        private QueryFactory _queryFactory;
+        public BaseRepository(IUnitOfWork uow)
+        {
+            _uow = uow;
+            _dicColumnName = DataRepositoryHelper.GetDicDbColumnName<TEntity>();
+            _tableName = typeof(TEntity).GetAttributeValue((DbNameAttribute tbn) => tbn.Name);
         }
 
-        protected virtual string _DbName { get { return ""; } }
-
-        private string _ConnectionString
+        public int BulkInsert(List<TEntity> intances)
         {
-            get
-            {
-                return DbConstant.SetConnectionString(_DbName);
-            }
+            throw new NotImplementedException();
         }
 
-        private string _TableName
+        public int BulkUpdate(List<TEntity> instances)
         {
-            get
-            {
-                return typeof(TEntity).GetAttributeValue((DbNameAttribute tbn) => tbn.Name);
-            }
+            throw new NotImplementedException();
         }
 
-        private Dictionary<string, string> _DicDbColumn
+        public bool Delete(TEntity instance)
         {
-            get
-            {
-                return DataRepositoryHelper.GetDicDbColumnName<TEntity>();
-            }
+            throw new NotImplementedException();
         }
 
-        private List<string> _QueryParameter
+        public List<TEntity> Find(Query query)
         {
-            get
-            {
-                var rs = new List<string>();
-
-                foreach (var value in _DicDbColumn.Keys)
-                {
-                    rs.Add($"@{value}");
-                }
-
-                return rs;
-            }
+            throw new NotImplementedException();
         }
 
-        private string _InsertQuery
+        public List<TEntity> FindAll()
         {
-            get
-            {
-                return $"INSERT INTO dbo.{_TableName} ({string.Join(",", _DicDbColumn.Keys)})"
-                      + $"VALUES ({string.Join(", ", _QueryParameter)})";
-            }
-        }
-
-        private SqlConnection _Connection
-        {
-            get { return new SqlConnection(_ConnectionString); }
+            throw new NotImplementedException();
         }
 
         public bool Insert(TEntity entity)
         {
-            using (SqlConnection connection = new SqlConnection(_ConnectionString))
+            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
-                    SqlCommand command = new SqlCommand(_InsertQuery, connection);
+                    SqlBuilder command = new SqlBuilder(_InsertQuery, connection);
                     foreach (var param in _QueryParameter)
                     {
                         var propName = _DicDbColumn[param.Trim('@')];
@@ -117,121 +87,29 @@ namespace Kinta.Persistence.Repositories
             return true;
         }
 
-        public bool UpdateFields(TEntity entity, string[] propNames)
+        public TEntity Single(Query query)
         {
-            if (propNames.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException(nameof(propNames));
-            }
-            try
-            {
-                if (propNames.IsNullOrEmpty())
-                {
-                    throw new ArgumentNullException(nameof(propNames));
-                }
-
-                List<string> fieldUpdates = new List<string>();
-                foreach (var propName in propNames)
-                {
-                    fieldUpdates.Add(_DicDbColumn.FirstOrDefault(x => x.Value == propName).Key);
-                }
-
-                var query = DataRepositoryHelper.GetUpdateFieldsQuery(fieldUpdates, _TableName);
-                using (SqlConnection connection = new SqlConnection(_ConnectionString))
-                {
-                    try
-                    {
-                        SqlCommand command = new SqlCommand(query, connection);
-                        command.Parameters.AddWithValue("@id", entity.GetPropValue("Id"));
-                        foreach (var param in fieldUpdates)
-                        {
-                            var propName = _DicDbColumn[param.Trim('@')];
-                            if (propName == nameof(IEditTime.UpdatedTime))
-                            {
-                                command.Parameters.AddWithValue(param, DateTime.Now);
-                            }
-                            else
-                            {
-                                command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
-                            }
-                        }
-
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                        connection.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        connection.Close();
-                        throw new Exception("" + ex);
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public bool UpdateFields(TEntity entity, params Expression<Func<TEntity, string>>[] expresstions)
+        public TEntity SingleOrDefault(Query query)
         {
-            var propNames = new List<string>();
-            foreach (var e in expresstions)
-            {
-                MemberExpression memberExpression = (MemberExpression)e.Body;
-                propNames.Add((string)memberExpression.GetPropValue(nameof(MemberExpression.Member)).GetPropValue("Name"));
-            }
-            return UpdateFields(entity, propNames.ToArray());
+            throw new NotImplementedException();
         }
 
-        private List<TEntity> FindAllWithSpecifyPropName(params string[] propNames)
+        public bool Update(TEntity instance)
         {
-            if (propNames.IsNullOrEmpty())
-            {
-                throw new ArgumentNullException(nameof(propNames));
-            }
-            try
-            {
-                var queryFactory = new QueryFactory(_Connection, _Complier as Compiler);
-                return queryFactory.Get<TEntity>(QueryInstance.Select(DataRepositoryHelper.GetColumnWithAlias(propNames.ToList(), _DicDbColumn))).ToList();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
-        public List<TEntity> FindAll()
+        public bool UpdateFields(TEntity instance, string[] fields)
         {
-            return FindAllWithSpecifyPropName(_DicDbColumn.Values.ToArray());
+            throw new NotImplementedException();
         }
 
-        public List<TEntity> FindAllWithSpecifyColumnByExps(params Expression<Func<TEntity, string>>[] expresstions)
+        public bool UpdateWhere(TEntity instance, Query query)
         {
-            var propNames = new List<string>();
-            foreach (var e in expresstions)
-            {
-                MemberExpression memberExpression = (MemberExpression)e.Body;
-                propNames.Add((string)memberExpression.GetPropValue(nameof(MemberExpression.Member)).GetPropValue("Name"));
-            }
-            return FindAllWithSpecifyPropName(propNames.ToArray());
-        }
-
-        public List<TEntity> Find(Query query)
-        {
-            try
-            {
-                var db = new QueryFactory(_Connection, _Complier as Compiler);
-
-                return db.Get<TEntity>(query).ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("" + ex);
-            }
+            throw new NotImplementedException();
         }
     }
 }

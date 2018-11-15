@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kinta.Persistence\Kinta.Persistence.csproj" />
+    <ProjectReference Include="..\Common\Kinta.Common.csproj" />
+    <ProjectReference Include="..\Kinta.Application\Kinta.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using SqlKata.Compilers;
 
 namespace Kinta.Services
 {
-    public class PostItemsService : BaseRepository<PostItemModel, SqlServerCompiler>, IService<PostItemModel>
+    public class PostItemsService : BaseRepository_ver1<PostItemModel, SqlServerCompiler>, IService<PostItemModel>
     {
         Query IService<PostItemModel>.QueryInstance => QueryInstance;
     }

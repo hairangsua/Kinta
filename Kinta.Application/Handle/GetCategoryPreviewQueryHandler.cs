@@ -1,11 +1,12 @@
-﻿using MediatR;
+﻿using Kinta.Application.Command;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kinta.Application.Categories.Queries
+namespace Kinta.Application.Handle
 {
     public class GetAllTagOfCategoryQueryHandler : IRequestHandler<GetAllTagOfCategoryQuery, List<string>>
     {
