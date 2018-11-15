@@ -58,7 +58,7 @@ namespace Kinta.Persistence.Repositories
             {
                 try
                 {
-                    SqlBuilder command = new SqlBuilder(_InsertQuery, connection);
+                    SqlCommand command = new SqlCommand(_InsertQuery, connection);
                     foreach (var param in _QueryParameter)
                     {
                         var propName = _DicDbColumn[param.Trim('@')];
