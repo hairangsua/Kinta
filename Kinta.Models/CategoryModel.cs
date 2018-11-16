@@ -7,34 +7,34 @@ namespace Kinta.Models.Entities
     [DbName("category"), RegisterInfo]
     public class CategoryModel : BaseModel
     {
-        [DbColumn(FieldName = "id")]
+        [DbColumn(Name = "id")]
         public string Id { get; set; }
 
-        [DbColumn(FieldName = "code")]
+        [DbColumn(Name = "code")]
         public string Code { get; set; }
 
-        [DbColumn(FieldName = "name")]
+        [DbColumn(Name = "name")]
         public string Name { get; set; }
 
-        [DbColumn(FieldName = "description")]
+        [DbColumn(Name = "description")]
         public string Description { get; set; }
 
-        [DbColumn(FieldName = "parent_code")]
+        [DbColumn(Name = "parent_code")]
         public string ParentCode { get; set; }
 
-        [DbColumn(FieldName = "child_code")]
+        [DbColumn(Name = "child_code")]
         public string ChildCode { get; set; }
 
-        [DbColumn(FieldName = "path")]
+        [DbColumn(Name = "path")]
         public string Path { get; set; }
 
-        [DbColumn(FieldName = "tag")]
+        [DbColumn(Name = "tag")]
         public string Tag { get; set; }
 
-        [DbColumn(FieldName = "created_time")]
+        [DbColumn(Name = "created_time")]
         public DateTime CreatedTime { get; set; }
 
-        [DbColumn(FieldName = "updated_time")]
+        [DbColumn(Name = "updated_time")]
         public DateTime UpdatedTime { get; set; }
 
     }
