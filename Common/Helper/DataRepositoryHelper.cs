@@ -20,7 +20,7 @@ namespace Kinta.Common.Helper
                     DbColumnAttribute fieldName = attr as DbColumnAttribute;
                     if (fieldName != null)
                     {
-                        _dict.Add(fieldName.FieldName, prop.Name);
+                        _dict.Add(fieldName.Name, prop.Name);
                     }
                 }
             }

@@ -8,11 +8,11 @@ namespace Kinta.Persistence.Repositories
 {
     public interface IBaseRepository<TModel>
     {
-        int BulkInsert(List<TModel> intances);
+        void BulkInsert(List<TModel> instances);
         bool Insert(TModel instance);
         bool Update(TModel instance);
         bool UpdateWhere(TModel instance, Query query);
-        int BulkUpdate(List<TModel> instances);
+        void BulkUpdate(List<TModel> instances);
         bool UpdateFields(TModel instance, string[] fields);
         bool Delete(TModel instance);
         List<TModel> Find(Query query);

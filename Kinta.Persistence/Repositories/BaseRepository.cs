@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Text;
-using Kinta.Common.Helper;
-using Kinta.Domain.Attributes;
+﻿using Dapper;
 using SqlKata;
 using SqlKata.Execution;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace Kinta.Persistence.Repositories
 {
@@ -17,24 +16,76 @@ namespace Kinta.Persistence.Repositories
         {
 
         }
-        private Dictionary<string, string> _dicColumnName;
-        private string _tableName;
+        private EntityInfo<TEntity> _entityInfo;
         private QueryFactory _queryFactory;
         public BaseRepository(IUnitOfWork uow)
         {
             _uow = uow;
-            _dicColumnName = DataRepositoryHelper.GetDicDbColumnName<TEntity>();
-            _tableName = typeof(TEntity).GetAttributeValue((DbNameAttribute tbn) => tbn.Name);
+            _entityInfo = EntityInfo<TEntity>.Create();
         }
 
-        public int BulkInsert(List<TEntity> intances)
+        public void BulkInsert(List<TEntity> instances)
         {
-            throw new NotImplementedException();
+            if (_entityInfo == null)
+            {
+                _entityInfo = EntityInfo<TEntity>.Create();
+            }
+
+            var sql = CommandBuilder.CreateInsertCommand(_entityInfo);
+
+            var insertObjs = new List<dynamic>();
+            foreach (var obj in instances)
+            {
+                object dynamicObj = RepositoryHelper.DefineDynamicObject(obj, _entityInfo.PropertyInfos);
+                insertObjs.Add(dynamicObj);
+            }
+
+            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            {
+                try
+                {
+                    connection.Execute(sql, insertObjs);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("" + ex);
+                }
+            }
         }
 
-        public int BulkUpdate(List<TEntity> instances)
+        public void BulkUpdate(List<TEntity> instances)
         {
-            throw new NotImplementedException();
+            if (_entityInfo == null)
+            {
+                _entityInfo = EntityInfo<TEntity>.Create();
+            }
+
+            BulkUpdateWithFields(instances, _entityInfo.PropertyInfos.Where(x => !x.IsKey).Select(x => x.ColumnName).ToArray());
+        }
+
+        public void BulkUpdateWithFields(List<TEntity> instances, string[] fields)
+        {
+            var sql = CommandBuilder.CreateUpdateCommand(_entityInfo, fields);
+
+            var updateObjs = new List<dynamic>();
+            foreach (var obj in instances)
+            {
+                object dynamicObj = RepositoryHelper.DefineDynamicObject(obj, _entityInfo.PropertyInfos);
+                updateObjs.Add(dynamicObj);
+            }
+
+            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            {
+                try
+                {
+                    connection.Execute(sql, updateObjs as object);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("" + ex);
+                }
+            }
+
         }
 
         public bool Delete(TEntity instance)
@@ -54,33 +105,23 @@ namespace Kinta.Persistence.Repositories
 
         public bool Insert(TEntity entity)
         {
+            if (_entityInfo == null)
+            {
+                _entityInfo = EntityInfo<TEntity>.Create();
+            }
+
+            var sql = CommandBuilder.CreateInsertCommand(_entityInfo);
+
+            object dynamicObj = RepositoryHelper.DefineDynamicObject(entity, _entityInfo.PropertyInfos);
+
             using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
-                    SqlCommand command = new SqlCommand(_InsertQuery, connection);
-                    foreach (var param in _QueryParameter)
-                    {
-                        var propName = _DicDbColumn[param.Trim('@')];
-                        if (propName == nameof(IEditTime.CreatedTime) || propName == nameof(IEditTime.UpdatedTime))
-                        {
-                            command.Parameters.AddWithValue(param, DateTime.Now);
-                        }
-                        else
-                        {
-                            command.Parameters.AddWithValue(param, entity.GetPropValue(propName));
-                        }
-                    }
-
-                    connection.Open();
-
-                    command.ExecuteNonQuery();
-
-                    connection.Close();
+                    connection.Execute(sql, dynamicObj);
                 }
                 catch (Exception ex)
                 {
-                    connection.Close();
                     throw new Exception("" + ex);
                 }
             }
@@ -99,12 +140,33 @@ namespace Kinta.Persistence.Repositories
 
         public bool Update(TEntity instance)
         {
-            throw new NotImplementedException();
+            if (_entityInfo == null)
+            {
+                _entityInfo = EntityInfo<TEntity>.Create();
+            }
+
+            return UpdateFields(instance, _entityInfo.PropertyInfos.Where(x => !x.IsKey).Select(x => x.ColumnName).ToArray());
         }
 
         public bool UpdateFields(TEntity instance, string[] fields)
         {
-            throw new NotImplementedException();
+            var sql = CommandBuilder.CreateUpdateCommand(_entityInfo, fields);
+
+            var dynamicObj = RepositoryHelper.DefineDynamicObject(instance, _entityInfo.PropertyInfos);
+
+            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            {
+                try
+                {
+                    connection.Execute(sql, dynamicObj as object);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("" + ex);
+                }
+            }
+
+            return true;
         }
 
         public bool UpdateWhere(TEntity instance, Query query)

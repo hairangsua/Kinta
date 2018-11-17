@@ -7,31 +7,31 @@ namespace Kinta.Models.Entities
     [DbName("post_item"), RegisterInfo]
     public class PostItemModel : BaseModel
     {
-        [DbColumn(FieldName = "id")]
+        [DbColumn(Name = "id")]
         public string Id { get; set; }
 
-        [DbColumn(FieldName = "title")]
+        [DbColumn(Name = "title")]
         public string Title { get; set; }
 
-        [DbColumn(FieldName = "ref_link")]
+        [DbColumn(Name = "ref_link")]
         public string RefLink { get; set; }
 
-        [DbColumn(FieldName = "images")]
+        [DbColumn(Name = "images")]
         public string Images { get; set; }
 
-        [DbColumn(FieldName = "category")]
+        [DbColumn(Name = "category")]
         public string Category { get; set; }
 
-        [DbColumn(FieldName = "url")]
+        [DbColumn(Name = "url")]
         public string Url { get; set; }
 
-        [DbColumn(FieldName = "tag")]
+        [DbColumn(Name = "tag")]
         public string Tag { get; set; }
 
-        [DbColumn(FieldName = "created_time")]
+        [DbColumn(Name = "created_time")]
         public DateTime CreatedTime { get; set; }
 
-        [DbColumn(FieldName = "updated_time")]
+        [DbColumn(Name = "updated_time")]
         public DateTime UpdatedTime { get; set; }
     }
 }

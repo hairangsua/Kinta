@@ -36,6 +36,5 @@ namespace Kinta.Common.Helper
         {
             return src.GetType().GetProperty(propName).GetValue(src, null);
         }
-
     }
 }
