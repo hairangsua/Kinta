@@ -1,11 +1,11 @@
 ﻿using Common.SqlBuilder;
 using Dapper;
 using Kinta.Common.Helper;
+using MySql.Data.MySqlClient;
 using SqlKata;
 using SqlKata.Execution;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -44,7 +44,7 @@ namespace Kinta.Persistence.Repositories
                 insertObjs.Add(dynamicObj);
             }
 
-            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
@@ -78,7 +78,7 @@ namespace Kinta.Persistence.Repositories
                 updateObjs.Add(dynamicObj);
             }
 
-            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
@@ -99,11 +99,11 @@ namespace Kinta.Persistence.Repositories
 
         public List<TEntity> FindAll()
         {
-            var query = new StringBuilder(CommandBuilder.CreateInsertCommand(_entityInfo));
+            var query = new StringBuilder(CommandBuilder.CreateSelectCommand(_entityInfo));
 
             var rs = new List<TEntity>();
 
-            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
@@ -131,7 +131,7 @@ namespace Kinta.Persistence.Repositories
 
             object dynamicObj = RepositoryHelper.DefineDynamicObject(entity, _entityInfo.PropertyInfos);
 
-            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
@@ -161,7 +161,7 @@ namespace Kinta.Persistence.Repositories
 
             var dynamicObj = RepositoryHelper.DefineDynamicObject(instance, _entityInfo.PropertyInfos);
 
-            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
@@ -208,17 +208,19 @@ namespace Kinta.Persistence.Repositories
             query.Append($" WHERE {wherePart.RawSql}");
 
             DynamicParameters parameter = new DynamicParameters();
-            foreach (var param in wherePart.Parameters.Keys)
-            {
-                parameter.Add($"@{param}", wherePart.Parameters[param]);
-            }
+            parameter.AddDynamicParams(wherePart.Parameters);
+            //foreach (var param in wherePart.Parameters.Keys)
+            //{
+            //    parameter.Add($"@{param}", wherePart.Parameters[param]);
+            //}
             var rs = new List<TEntity>();
 
-            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
                     connection.Open();
+                    var a = query.Append(";").ToString();
                     rs = connection.Query<TEntity>(query.Append(";").ToString(), parameter).ToList();
                     connection.Close();
                 }
@@ -253,7 +255,7 @@ namespace Kinta.Persistence.Repositories
             }
             var rs = new TEntity();
 
-            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {
@@ -292,7 +294,7 @@ namespace Kinta.Persistence.Repositories
             }
             var rs = new TEntity();
 
-            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
             {
                 try
                 {

@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Kinta.Common.Helper;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Json;
 
 namespace Kinta.Persistence.Repositories
 {
@@ -18,9 +16,9 @@ namespace Kinta.Persistence.Repositories
 
         public static ConnectionStringInfo GetConnectionByName(string dbName)
         {
-            string text = File.ReadAllText(@"C:\Work\Kinta\ShareConfig");
-            var connectionGroup = JsonParser.Deserialize<ConnectionGroup>(text);
-
+            //TO DO: use relative path
+            string text = File.ReadAllText(@"C:\Work\Kinta\ShareConfig\connections.json");
+            var connectionGroup = JSONHelper.Parse<ConnectionGroup>(text);
             var connectionInfos = connectionGroup.Connections;
             return connectionInfos.FirstOrDefault(x => x.Enabled && x.Name == dbName);
         }

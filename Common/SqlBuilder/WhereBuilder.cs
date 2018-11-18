@@ -69,7 +69,8 @@ namespace Common.SqlBuilder
                     {
                         return WherePart.Concat(Recurse(ref i, expression), "=", WherePart.IsParameter(i++, true));
                     }
-                    return WherePart.IsSql("[" + colName + "]");
+                    //return WherePart.IsSql("[" + colName + "]");
+                    return WherePart.IsSql(colName);
                 }
                 if (member.Member is FieldInfo)
                 {

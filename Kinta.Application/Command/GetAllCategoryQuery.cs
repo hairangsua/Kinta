@@ -1,12 +1,12 @@
-﻿using MediatR;
+﻿using Kinta.Models.Entities;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Kinta.Application.Command
 {
-    public class GetAllTagOfCategoryQuery : IRequest<List<string>>
+    public class GetAllCategoryQuery : IRequest<List<CategoryModel>>
     {
-
     }
 }

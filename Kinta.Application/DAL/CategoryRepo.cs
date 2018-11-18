@@ -1,11 +1,15 @@
-﻿using System;
+﻿using Kinta.Models.Entities;
+using Kinta.Persistence.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Kinta.Application.DAL
 {
-    //TO DO: Base on BaseRepository
-    public class CategoryRepo
+    public class CategoryRepo : BaseRepository<CategoryModel>
     {
+        public CategoryRepo(IUnitOfWork uow) : base(uow)
+        {
+        }
     }
 }
