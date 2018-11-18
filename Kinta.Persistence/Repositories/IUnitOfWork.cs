@@ -9,7 +9,6 @@ namespace Kinta.Persistence.Repositories
     public interface IUnitOfWork
     {
         IDbConnection Connection { get; }
-        Compiler Compiler { get; }
         event Action OnComit;
         event Action OnRollBack;
     }

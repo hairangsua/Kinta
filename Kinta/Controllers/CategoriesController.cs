@@ -1,8 +1,7 @@
-﻿using Kinta.Application.Models;
-using Kinta.Common.Helper;
-using Kinta.Services;
+﻿using Kinta.Common.Helper;
+using Kinta.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace Kinta.Controllers
 {
@@ -10,26 +9,27 @@ namespace Kinta.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly IService<CategoryModel> _service;
+        ////private readonly IService<CategoryModel> _service;
 
-        public CategoriesController(IService<CategoryModel> service)
-        {
-            _service = service;
-        }
+        //public CategoriesController(/*IService<CategoryModel> service*/)
+        //{
+        //    //_service = service;
+        //}
 
-        [HttpPost]
-        [Route("InsertCategoryItems")]
-        public ActionResult<bool> Insert(CategoryModel obj)
-        {
-            obj.Id = IdHelper.NewGuid();
-            return _service.Insert(obj);
-        }
+        //[HttpPost]
+        //[Route("InsertCategoryItems")]
+        //public ActionResult<bool> Insert(CategoryModel obj)
+        //{
+        //    obj.Id = IdHelper.NewGuid();
+        //    MySqlConnection myConnection = new MySqlConnection("Data Source=35.236.185.220;Port=3306;User=root;Password=nghia1996;Initial Catalog=kinta)";
+        //    return _service.Insert(obj);
+        //}
 
-        [HttpGet]
-        [Route("GetCategoryItems")]
-        public ActionResult<List<CategoryModel>> GetAll()
-        {
-            return _service.FindAll();
-        }
+        //[HttpGet]
+        //[Route("GetCategoryItems")]
+        //public ActionResult<List<CategoryModel>> GetAll()
+        //{
+        //    return _service.FindAll();
+        //}
     }
 }

@@ -1,10 +1,14 @@
-﻿using Dapper;
+﻿using Common.SqlBuilder;
+using Dapper;
+using Kinta.Common.Helper;
 using SqlKata;
 using SqlKata.Execution;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
 
 namespace Kinta.Persistence.Repositories
 {
@@ -14,10 +18,10 @@ namespace Kinta.Persistence.Repositories
 
         public BaseRepository()
         {
-
+            _entityInfo = EntityInfo<TEntity>.Create();
         }
         private EntityInfo<TEntity> _entityInfo;
-        private QueryFactory _queryFactory;
+
         public BaseRepository(IUnitOfWork uow)
         {
             _uow = uow;
@@ -93,14 +97,27 @@ namespace Kinta.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        public List<TEntity> Find(Query query)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<TEntity> FindAll()
         {
-            throw new NotImplementedException();
+            var query = new StringBuilder(CommandBuilder.CreateInsertCommand(_entityInfo));
+
+            var rs = new List<TEntity>();
+
+            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    rs = connection.Query<TEntity>(query.ToString()).ToList();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("" + ex);
+                }
+            }
+
+            return rs;
         }
 
         public bool Insert(TEntity entity)
@@ -126,16 +143,6 @@ namespace Kinta.Persistence.Repositories
                 }
             }
             return true;
-        }
-
-        public TEntity Single(Query query)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntity SingleOrDefault(Query query)
-        {
-            throw new NotImplementedException();
         }
 
         public bool Update(TEntity instance)
@@ -169,9 +176,137 @@ namespace Kinta.Persistence.Repositories
             return true;
         }
 
+        public bool UpdateFields(TEntity instance, params Expression<Func<TEntity, string>>[] expressions)
+        {
+            var propNames = new List<string>();
+            foreach (var e in expressions)
+            {
+                MemberExpression memberExpression = (MemberExpression)e.Body;
+                propNames.Add((string)memberExpression.GetPropValue(nameof(MemberExpression.Member)).GetPropValue("Name"));
+            }
+            return UpdateFields(instance, propNames.ToArray());
+        }
+
         public bool UpdateWhere(TEntity instance, Query query)
         {
             throw new NotImplementedException();
+        }
+
+        public List<TEntity> Find(Expression<Func<TEntity, bool>> expression)
+        {
+            //build ra câu select
+            var query = new StringBuilder(CommandBuilder.CreateSelectCommand(_entityInfo));
+
+            //lấy expression để build ra câu where
+            var builder = new WhereBuilder<TEntity>();
+            var wherePart = builder.ToSql(expression);
+            if (wherePart.Parameters == null)
+            {
+                throw new Exception("Can not find any parameter in where part.");
+            }
+
+            query.Append($" WHERE {wherePart.RawSql}");
+
+            DynamicParameters parameter = new DynamicParameters();
+            foreach (var param in wherePart.Parameters.Keys)
+            {
+                parameter.Add($"@{param}", wherePart.Parameters[param]);
+            }
+            var rs = new List<TEntity>();
+
+            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    rs = connection.Query<TEntity>(query.Append(";").ToString(), parameter).ToList();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("" + ex);
+                }
+            }
+
+            return rs;
+        }
+
+        public TEntity Single(Expression<Func<TEntity, bool>> expression)
+        {
+            //build ra câu select
+            var query = new StringBuilder(CommandBuilder.CreateSelectCommand(_entityInfo));
+
+            //lấy expression để build ra câu where
+            var builder = new WhereBuilder<TEntity>();
+            var wherePart = builder.ToSql(expression);
+            if (wherePart.Parameters == null)
+            {
+                throw new Exception("Can not find any parameter in where part.");
+            }
+
+            query.Append($" WHERE {wherePart.RawSql}");
+
+            DynamicParameters parameter = new DynamicParameters();
+            foreach (var param in wherePart.Parameters.Keys)
+            {
+                parameter.Add($"@{param}", wherePart.Parameters[param]);
+            }
+            var rs = new TEntity();
+
+            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    rs = connection.QuerySingle<TEntity>(query.ToString(), parameter);
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("" + ex);
+                }
+            }
+
+            return rs;
+        }
+
+        public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> expression)
+        {
+            //build ra câu select
+            var query = new StringBuilder(CommandBuilder.CreateSelectCommand(_entityInfo));
+
+            //lấy expression để build ra câu where
+            var builder = new WhereBuilder<TEntity>();
+            var wherePart = builder.ToSql(expression);
+            if (wherePart.Parameters == null)
+            {
+                throw new Exception("Can not find any parameter in where part.");
+            }
+
+            query.Append($"WHERE {wherePart.RawSql}");
+
+            DynamicParameters parameter = new DynamicParameters();
+            foreach (var param in wherePart.Parameters.Keys)
+            {
+                parameter.Add($"@{param}", wherePart.Parameters[param]);
+            }
+            var rs = new TEntity();
+
+            using (SqlConnection connection = new SqlConnection(_uow.Connection.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    rs = connection.QuerySingleOrDefault<TEntity>(query.ToString(), parameter);
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("" + ex);
+                }
+            }
+
+            return rs;
         }
     }
 }

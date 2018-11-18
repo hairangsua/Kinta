@@ -10,21 +10,17 @@ namespace Kinta.Persistence.Repositories
     {
         private IDbConnection _connection;
         private IDbTransaction _transaction;
-        private Compiler _complier;
         private Action _commit;
         private Action _rollback;
 
-        public UnitOfWork(IDbConnection connection, Compiler compiler)
+        public UnitOfWork(IDbConnection connection)
         {
             _connection = connection;
-            _complier = compiler;
             connection.EnsureOpen();
             _transaction = connection.BeginTransaction();
         }
 
         public IDbConnection Connection { get { return _connection; } }
-
-        public Compiler Compiler { get { return _complier; } }
 
         public event Action OnComit
         {

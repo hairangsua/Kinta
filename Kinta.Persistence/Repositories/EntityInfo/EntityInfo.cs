@@ -34,10 +34,14 @@ namespace Kinta.Persistence.Repositories
                         DbType = attribute.DbType,
                         Length = attribute.Length,
                         IsKey = attribute.IsKey,
-                        Value = 
+                        //Value = 
                     });
                 }
+
             }
+
+            entityInfo.PropertyInfos = propertyInfos;
+
             return entityInfo;
         }
     }

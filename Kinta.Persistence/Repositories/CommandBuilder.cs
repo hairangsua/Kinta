@@ -69,5 +69,35 @@ namespace Kinta.Persistence.Repositories
 
             return updateCmd;
         }
+
+        public static string CreateSelectCommand<TEntity>(EntityInfo<TEntity> entityInfo)
+        {
+            if (entityInfo == null)
+            {
+                entityInfo = EntityInfo<TEntity>.Create();
+            }
+
+            if (entityInfo.TableName.IsEmpty())
+            {
+                throw new ArgumentNullException(nameof(entityInfo.TableName));
+            }
+
+            if (entityInfo.PropertyInfos.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(entityInfo.PropertyInfos));
+            }
+
+            var cmd = new StringBuilder("SELECT ");
+            //foreach (var propInfo in entityInfo.PropertyInfos)
+            //{
+            //    cmd.Append($" {propInfo.ColumnName} AS {propInfo.Name}");
+            //}
+
+            cmd.Append($"{string.Join(", ", entityInfo.PropertyInfos.Select(x => $" {x.ColumnName} AS {x.Name}"))}");
+
+            cmd.Append($" FROM {entityInfo.TableName}");
+
+            return cmd.ToString();
+        }
     }
 }

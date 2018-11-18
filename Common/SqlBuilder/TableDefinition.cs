@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Common.SQLFromExpression
+namespace Common.SqlBuilder
 {
     public class TableDefinition<TEntity>
     {

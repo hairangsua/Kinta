@@ -1,5 +1,4 @@
-﻿using Kinta.Application.Categories.Queries;
-using Kinta.Application.Infastructure;
+﻿using Kinta.Application.Infastructure;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Kinta
 {
@@ -30,7 +28,7 @@ namespace Kinta
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
-            services.AddMediatR(typeof(GetAllTagOfCategoryQueryHandler).GetTypeInfo().Assembly);
+            //services.AddMediatR(typeof(GetAllTagOfCategoryQueryHandler).GetTypeInfo().Assembly);
 
             // Customise default API behavour
             services.Configure<ApiBehaviorOptions>(option =>

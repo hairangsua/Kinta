@@ -15,9 +15,9 @@ namespace Kinta.Persistence.Repositories
         void BulkUpdate(List<TModel> instances);
         bool UpdateFields(TModel instance, string[] fields);
         bool Delete(TModel instance);
-        List<TModel> Find(Query query);
+        List<TModel> Find(Expression<Func<TModel, bool>> expression);
         List<TModel> FindAll();
-        TModel Single(Query query);
-        TModel SingleOrDefault(Query query);
+        TModel Single(Expression<Func<TModel, bool>> expression);
+        TModel SingleOrDefault(Expression<Func<TModel, bool>> expression);
     }
 }

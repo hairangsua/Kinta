@@ -1,0 +1,13 @@
+{
+  "Name": "default",
+  "Description": "Default connection group",
+  "Enabled": true,
+
+  "Connections": [
+    {
+      "enabled": true,
+      "name": "db_kinta",
+      "value": "Data Source=35.236.185.220;Port=3306;Initial Catalog=kinta;User ID=root;Password=nghia1996;"
+    }
+  ]
+}

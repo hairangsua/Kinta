@@ -1,12 +1,12 @@
-﻿using Kinta.Application.Models;
-using Kinta.Persistence.Repositories;
-using SqlKata;
-using SqlKata.Compilers;
+﻿//using Kinta.Application.Models;
+//using Kinta.Persistence.Repositories;
+//using SqlKata;
+//using SqlKata.Compilers;
 
-namespace Kinta.Services
-{
-    public class PostItemsService : BaseRepository_ver1<PostItemModel, SqlServerCompiler>, IService<PostItemModel>
-    {
-        Query IService<PostItemModel>.QueryInstance => QueryInstance;
-    }
-}
+//namespace Kinta.Services
+//{
+//    public class PostItemsService : BaseRepository_ver1<PostItemModel, SqlServerCompiler>, IService<PostItemModel>
+//    {
+//        Query IService<PostItemModel>.QueryInstance => QueryInstance;
+//    }
+//}

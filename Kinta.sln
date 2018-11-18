@@ -29,7 +29,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta.Persistence", "Kinta.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{988D7442-E98E-44AA-BF71-A9FA468EEE51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinta.Models", "Kinta.Models\Kinta.Models.csproj", "{26EEC97B-E2F2-442E-95BC-7334D17D2B1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kinta.Models", "Kinta.Models\Kinta.Models.csproj", "{26EEC97B-E2F2-442E-95BC-7334D17D2B1C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShareConfig", "ShareConfig", "{AB08620E-724B-4CC3-9A98-3E0B065B6AB3}"
+	ProjectSection(SolutionItems) = preProject
+		ShareConfig\connections.json = ShareConfig\connections.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
