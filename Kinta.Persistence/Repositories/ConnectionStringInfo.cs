@@ -16,8 +16,8 @@ namespace Kinta.Persistence.Repositories
 
         public static ConnectionStringInfo GetConnectionByName(string dbName)
         {
-            //TO DO: use relative path
-            string text = File.ReadAllText(@"C:\Work\Kinta\ShareConfig\connections.json");
+            var path = System.AppDomain.CurrentDomain.BaseDirectory.ToString() + @"Configuration\connections.json";
+            string text = File.ReadAllText(path);
             var connectionGroup = JSONHelper.Parse<ConnectionGroup>(text);
             var connectionInfos = connectionGroup.Connections;
             return connectionInfos.FirstOrDefault(x => x.Enabled && x.Name == dbName);

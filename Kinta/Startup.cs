@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Kinta
@@ -30,7 +32,10 @@ namespace Kinta
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
-            services.AddMediatR(typeof(GetAllCategoryQueryHandler).GetTypeInfo().Assembly);
+            //var assembly = typeof(GetAllCategoryQueryHandler).GetTypeInfo().Assembly;
+
+            var assembly = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains("Kinta.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null")).ToList();
+            services.AddMediatR(assembly);
 
             // Customise default API behavour
             services.Configure<ApiBehaviorOptions>(option =>

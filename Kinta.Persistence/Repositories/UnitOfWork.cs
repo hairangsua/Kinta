@@ -16,8 +16,8 @@ namespace Kinta.Persistence.Repositories
         public UnitOfWork(IDbConnection connection)
         {
             _connection = connection;
-            connection.EnsureOpen();
-            _transaction = connection.BeginTransaction();
+            _connection.EnsureOpen();
+            _transaction = _connection.BeginTransaction();
         }
 
         public IDbConnection Connection { get { return _connection; } }

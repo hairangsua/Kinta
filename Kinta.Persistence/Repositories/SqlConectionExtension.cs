@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Kinta.Persistence.Repositories
 {
-    public static class SqlConection
+    public static class SqlConectionExtension
     {
         public static IDbConnection EnsureOpen(this IDbConnection connection)
         {

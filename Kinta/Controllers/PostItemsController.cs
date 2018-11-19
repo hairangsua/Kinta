@@ -1,32 +1,21 @@
-﻿using Kinta.Services;
+﻿using Kinta.Application.Command;
+using Kinta.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Kinta.Controllers
 {
     [Route("v1/")]
     [ApiController]
-    public class PostItemsController : ControllerBase
+    public class PostItemsController : BaseController
     {
-        //private readonly IService<PostItemModel> _service;
-
-        //public PostItemsController(IService<PostItemModel> service)
-        //{
-        //    _service = service;
-        //}
-
-        //[HttpPost]
-        //[Route("Insert")]
-        //public ActionResult<bool> Insert(PostItemModel obj)
-        //{
-        //    return _service.Insert(obj);
-        //}
-
-        //[HttpGet]
-        //[Route("GetAll")]
-        //public ActionResult<List<PostItemModel>> GetAll()
-        //{
-        //    return _service.FindAll();
-        //}
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<PostItemModel>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAll([FromQuery] GetAllPostItemsQuery query)
+        {
+            return Ok(await Mediator.Send(query));
+        }
     }
 }

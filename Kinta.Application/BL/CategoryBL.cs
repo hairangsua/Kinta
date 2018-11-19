@@ -11,7 +11,15 @@ namespace Kinta.Application.BL
     {
         public List<CategoryModel> GetAll()
         {
-            return Repo.Find(x => x.Id == "23213213");
+            return Repo.Find(x => x.Id == "123123");
         }
+
+        //public CategoryModel GetSomething()
+        //{
+        //    using ()
+        //    {
+
+        //    }
+        //}
     }
 }

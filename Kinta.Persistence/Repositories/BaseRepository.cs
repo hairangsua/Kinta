@@ -107,9 +107,7 @@ namespace Kinta.Persistence.Repositories
             {
                 try
                 {
-                    connection.Open();
                     rs = connection.Query<TEntity>(query.ToString()).ToList();
-                    connection.Close();
                 }
                 catch (Exception ex)
                 {

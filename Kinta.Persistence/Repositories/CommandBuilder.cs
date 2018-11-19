@@ -88,10 +88,6 @@ namespace Kinta.Persistence.Repositories
             }
 
             var cmd = new StringBuilder("SELECT ");
-            //foreach (var propInfo in entityInfo.PropertyInfos)
-            //{
-            //    cmd.Append($" {propInfo.ColumnName} AS {propInfo.Name}");
-            //}
 
             cmd.Append($"{string.Join(", ", entityInfo.PropertyInfos.Select(x => $" {x.ColumnName} AS {x.Name}"))}");
 
