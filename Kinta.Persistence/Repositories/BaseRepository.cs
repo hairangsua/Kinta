@@ -20,6 +20,7 @@ namespace Kinta.Persistence.Repositories
         {
             _entityInfo = EntityInfo<TEntity>.Create();
         }
+
         private EntityInfo<TEntity> _entityInfo;
 
         public BaseRepository(IUnitOfWork uow)

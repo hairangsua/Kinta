@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common\Kinta.Common.csproj" />
     <ProjectReference Include="..\Kinta.Domain\Kinta.Domain.csproj" />
   </ItemGroup>
 

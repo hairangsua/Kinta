@@ -1,4 +1,5 @@
 ﻿using Kinta.Domain.Errors;
+using System;
 
 namespace Kinta.Common.Helper
 {

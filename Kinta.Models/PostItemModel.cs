@@ -1,5 +1,4 @@
 ﻿using Kinta.Domain.Attributes;
-using Kinta.Domain.Entities;
 using System;
 
 namespace Kinta.Models.Entities
