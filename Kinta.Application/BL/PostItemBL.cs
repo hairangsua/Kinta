@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Kinta.Application.BL
 {
-    public class CategoryBL : BaseBL<CategoryModel, CategoryRepo>
+    public class PostItemBL : BaseBL<PostItemModel, PostItemRepo>
     {
-        public List<CategoryModel> GetAll()
+        public List<PostItemModel> GetAll()
         {
             return Repo.FindAll();
         }

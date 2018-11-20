@@ -1,10 +1,11 @@
 ﻿using Kinta.Common.Helper;
+using Kinta.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Text;
 
-namespace Kinta.Persistence.Repositories
+namespace Kinta.Persistence.Common
 {
     public class RepositoryHelper
     {

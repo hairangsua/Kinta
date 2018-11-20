@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Kinta.Application.DAL
 {
-    public class CategoryRepo : BaseRepository<CategoryModel>
+    public class PostItemRepo : BaseRepository<PostItemModel>
     {
-        public CategoryRepo() : base(DbConstant.KINTA_DB)
+        public PostItemRepo() : base(DbConstant.KINTA_DB)
         {
         }
     }

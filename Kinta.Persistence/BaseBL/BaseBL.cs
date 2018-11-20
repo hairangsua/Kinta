@@ -6,60 +6,58 @@ using MySql.Data.MySqlClient;
 using StackExchange.Profiling;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Kinta.Persistence.BaseBL
 {
     public abstract class BaseBL<TEntity, TRepo> where TEntity : BaseModel, new() where TRepo : BaseRepository<TEntity>
     {
-        protected virtual string DbName { get; set; }
-
         public TRepo Repo
         {
             get
             {
-                if (DbName.IsEmpty())
-                {
-                    throw new NullReferenceException(nameof(DbName));
-                }
-                var connectionInfo = ConnectionStringInfo.GetConnectionByName(DbName);
-                if (connectionInfo == null)
-                {
-                    throw new Exception("Can not get connection info");
-                }
-                using (var connection = new MySqlConnection(connectionInfo.Value))
-                using (var uow = new UnitOfWork(connection))
-                {
-                    //uow.Commit();
-                    return (TRepo)Activator.CreateInstance(typeof(TRepo), uow);
-                }
+                return (TRepo)Activator.CreateInstance(typeof(TRepo));
             }
         }
 
-        public Error Create(List<TEntity> entities)
+        public Error Create(List<TEntity> entities, IDbTransaction ts = null)
         {
             if (entities.IsNullOrEmpty())
             {
                 return new Error(new ArgumentNullException(nameof(entities)));
             }
-
-            var err = ValidateDataBeforeCreate(entities);
-            if (err.IsNotOK())
+            try
             {
-                return err;
+                var err = ValidateDataBeforeCreate(entities);
+                if (err.IsNotOK())
+                {
+                    return err;
+                }
+
+                PrepareDataBeforeCreate(ref entities);
+
+                foreach (var item in entities)
+                {
+                    item.SetGuid();
+                    item.SetCreatedTime();
+                    item.SetUpdatedTime();
+                }
+
+                using (ts = ts ?? Repo.Connection.BeginTransaction())
+                {
+                    Repo.BulkInsert(entities);
+                    AfterSaveData(entities, ts);
+                    ts.Commit();
+                }
+
+                return Error.OK;
+            }
+            catch (Exception)
+            {
+                ts.Rollback();
+                throw;
             }
 
-            PrepareDataBeforeCreate(ref entities);
-
-            foreach (var item in entities)
-            {
-                item.SetGuid();
-                item.SetCreatedTime();
-                item.SetUpdatedTime();
-            }
-
-            Repo.BulkInsert(entities);
-
-            return Error.OK;
         }
 
         public virtual Error ValidateDataBeforeCreate(List<TEntity> entities)
@@ -72,28 +70,51 @@ namespace Kinta.Persistence.BaseBL
             return;
         }
 
-        public Error Update(List<TEntity> entities)
+        public Error Update(List<TEntity> entities, IDbTransaction ts = null)
         {
             if (entities.IsNullOrEmpty())
             {
                 return new Error(new ArgumentNullException(nameof(entities)));
             }
-
-            var err = ValidateDataBeforeUpdate(entities);
-            if (err.IsNotOK())
+            try
             {
-                return err;
-            }
+                var err = ValidateDataBeforeUpdate(entities);
+                if (err.IsNotOK())
+                {
+                    return err;
+                }
 
-            PrepareDataBeforeUpdate(ref entities);
-            foreach (var item in entities)
+                PrepareDataBeforeUpdate(ref entities);
+                foreach (var item in entities)
+                {
+                    item.SetUpdatedTime();
+                }
+
+                using (ts = ts ?? Repo.Connection.BeginTransaction())
+                {
+                    Repo.BulkUpdate(entities);
+                    AfterSaveData(entities, ts);
+                    ts.Commit();
+                }
+
+                AfterSaveDataWithoutTransaction(entities);
+                return Error.OK;
+            }
+            catch (Exception)
             {
-                item.SetUpdatedTime();
+                ts.Rollback();
+                throw;
             }
+        }
 
-            Repo.BulkUpdate(entities);
+        public virtual void AfterSaveData(List<TEntity> entities, IDbTransaction ts)
+        {
 
-            return Error.OK;
+        }
+
+        public virtual void AfterSaveDataWithoutTransaction(List<TEntity> entities)
+        {
+
         }
 
         public virtual Error ValidateDataBeforeUpdate(List<TEntity> entities)
@@ -106,7 +127,7 @@ namespace Kinta.Persistence.BaseBL
             return;
         }
 
-        public Error Delete(TEntity entity)
+        public Error Delete(TEntity entity, IDbTransaction ts = null)
         {
             if (entity == null)
             {

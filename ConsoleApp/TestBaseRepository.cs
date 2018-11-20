@@ -50,10 +50,10 @@ namespace ConsoleApp
 
         public static void InitTest()
         {
-            var uow = new UnitOfWork(new TestDbConnection());
-            var repo = new BaseRepository<AModel>(uow);
-            var now = DateTime.Now;
-            var lstA = repo.Find(x => x.Code == "someCode" && x.BirthDay == now && x.Hobbiy == "porn");
+            //var uow = new UnitOfWork(new TestDbConnection());
+            //var repo = new BaseRepository_ver2<AModel>(uow);
+            //var now = DateTime.Now;
+            //var lstA = repo.Find(x => x.Code == "someCode" && x.BirthDay == now && x.Hobbiy == "porn");
         }
     }
 }

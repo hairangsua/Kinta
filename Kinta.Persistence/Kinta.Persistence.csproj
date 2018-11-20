@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\BaseRepository_UnitOfWork.cs" />
     <Compile Remove="Repositories\BaseRepository_ver1.cs" />
+    <Compile Remove="Repositories\BaseRepository_ver2.cs" />
   </ItemGroup>
 
   <ItemGroup>
