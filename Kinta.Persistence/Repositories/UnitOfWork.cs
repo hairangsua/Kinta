@@ -17,7 +17,7 @@ namespace Kinta.Persistence.Repositories
         {
             _connection = connection;
             _connection.EnsureOpen();
-            //_transaction = _connection.BeginTransaction();
+            _transaction = _connection.BeginTransaction();
         }
 
         public IDbConnection Connection { get { return _connection; } }

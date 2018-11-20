@@ -130,17 +130,18 @@ namespace Kinta.Persistence.Repositories
 
             object dynamicObj = RepositoryHelper.DefineDynamicObject(entity, _entityInfo.PropertyInfos);
 
-            using (MySqlConnection connection = new MySqlConnection(_uow.Connection.ConnectionString))
+            using (_uow.Connection)
             {
                 try
                 {
-                    connection.Execute(sql, dynamicObj);
+                    _uow.Connection.Execute(sql, dynamicObj);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw new Exception("" + ex);
+                    throw;
                 }
             }
+
             return true;
         }
 

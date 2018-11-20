@@ -26,11 +26,12 @@ namespace Kinta.Persistence.BaseBL
                 {
                     throw new Exception("Can not get connection info");
                 }
-                var connection = new MySqlConnection(connectionInfo.Value);
-                var wrappedConnection = new StackExchange.Profiling.Data.ProfiledDbConnection(connection, MiniProfiler.Current);
-
-                var uow = new UnitOfWork(wrappedConnection);
-                return (TRepo)Activator.CreateInstance(typeof(TRepo), uow);
+                using (var connection = new MySqlConnection(connectionInfo.Value))
+                using (var uow = new UnitOfWork(connection))
+                {
+                    //uow.Commit();
+                    return (TRepo)Activator.CreateInstance(typeof(TRepo), uow);
+                }
             }
         }
 
