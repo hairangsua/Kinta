@@ -6,6 +6,6 @@ namespace Kinta.Domain
 {
     public class AppSettings
     {
-        public string Seccret { get; set; }
+        public string Secret { get; set; }
     }
 }

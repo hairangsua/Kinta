@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="FluentValidation" Version="8.0.100" />
     <PackageReference Include="MediatR" Version="5.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
@@ -19,12 +20,6 @@
     <ProjectReference Include="..\Kinta.Domain\Kinta.Domain.csproj" />
     <ProjectReference Include="..\Kinta.Models\Kinta.Models.csproj" />
     <ProjectReference Include="..\Kinta.Persistence\Kinta.Persistence.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>..\..\WebApi\SharedLibs\AutoMapper.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

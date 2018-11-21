@@ -239,7 +239,7 @@ namespace Kinta.Persistence.Repositories
                     throw new Exception("Can not find any parameter in where part.");
                 }
 
-                query.Append($"WHERE {wherePart.RawSql}");
+                query.Append($" WHERE {wherePart.RawSql}");
 
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.AddDynamicParams(wherePart.Parameters);

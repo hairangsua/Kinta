@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Kinta.Models.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,8 @@ namespace Kinta.Domain.AutoMapper
     {
         public AutoMapperProfile()
         {
-            //CreateMap<User,>
+            CreateMap<User, UserModel>();
+            CreateMap<UserModel, User>();
         }
     }
 }

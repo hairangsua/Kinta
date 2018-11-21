@@ -10,6 +10,15 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
+using Kinta.Domain;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Kinta.Models.Authentication;
+using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
+using Kinta.Application.BL;
 
 namespace Kinta
 {
@@ -26,6 +35,50 @@ namespace Kinta
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+            services.AddAutoMapper();
+
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            //configue jwt authentication
+            var appsettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appsettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        var userId = int.Parse(context.Principal.Identity.Name);
+                        var user = userService.GetById(userId);
+                        if (user == null)
+                        {
+                            //return unauthorized if user no longer exists
+                            context.Fail("Unauthorized");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddScoped<IUserService, UserService>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
@@ -43,47 +96,22 @@ namespace Kinta
                 option.SuppressModelStateInvalidFilter = true;
             });
 
-            // Note .AddMiniProfiler() returns a IMiniProfilerBuilder for easy intellisense
-            services.AddMiniProfiler(options =>
-            {
-                // All of this is optional. You can simply call .AddMiniProfiler() for all defaults
-
-                // (Optional) Path to use for profiler URLs, default is /mini-profiler-resources
-                options.RouteBasePath = "/profiler";
-
-                // (Optional) Control storage
-                // (default is 30 minutes in MemoryCacheStorage)
-                //(options.Storage as MemoryCacheStorage).CacheDuration = TimeSpan.FromMinutes(60);
-
-                // (Optional) Control which SQL formatter to use, InlineFormatter is the default
-                options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
-
-                // (Optional) To control authorization, you can use the Func<HttpRequest, bool> options:
-                // (default is everyone can access profilers)
-                //options.ResultsAuthorize = request => MyGetUserFunction(request).CanSeeMiniProfiler;
-                //options.ResultsListAuthorize = request => MyGetUserFunction(request).CanSeeMiniProfiler;
-
-                // (Optional)  To control which requests are profiled, use the Func<HttpRequest, bool> option:
-                // (default is everything should be profiled)
-                //options.ShouldProfile = request => MyShouldThisBeProfiledFunction(request);
-
-                // (Optional) Profiles are stored under a user ID, function to get it:
-                // (default is null, since above methods don't use it by default)
-                //options.UserIdProvider = request => MyGetUserIdFunction(request);
-
-                // (Optional) Swap out the entire profiler provider, if you want
-                // (default handles async and works fine for almost all appliations)
-                //options.ProfilerProvider = new MyProfilerProvider();
-
-                // (Optional) You can disable "Connection Open()", "Connection Close()" (and async variant) tracking.
-                // (defaults to true, and connection opening/closing is tracked)
-                options.TrackConnectionOpenClose = true;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
+            app.UseCors(x => x
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

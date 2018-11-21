@@ -21,6 +21,11 @@ namespace Kinta.Common.Helper
             return !IsEmpty(self);
         }
 
+        public static bool IsNullOrWhiteSpace(this string self)
+        {
+            return string.IsNullOrWhiteSpace(self);
+        }
+
         public static string RemoveSpecifyChar(this string source, char c)
         {
             if (source.IsEmpty())
