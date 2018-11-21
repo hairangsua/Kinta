@@ -3,27 +3,48 @@ using System;
 
 namespace Kinta.Models
 {
+    public enum ModelState
+    {
+        Unchanged = 0,
+        Added = 1,
+        Modified = 2,
+        Deleted = 3
+    }
+
     public abstract class BaseModel
     {
+        public ModelState ModelState { get; set; }
+
         public void SetGuid()
         {
-            ReflectionHelper.SetPropValue(this, "Id", IdHelper.NewGuid());
+            ReflectionHelper.SetPropValue(this, nameof(IId.Id), IdHelper.NewGuid());
         }
 
         public void SetCreatedTime()
         {
-            if (ReflectionHelper.HasProperty(this, "CreatedTime"))
+            if (ReflectionHelper.HasProperty(this, nameof(IDataTime.CreatedTime)))
             {
-                ReflectionHelper.SetPropValue(this, "CreatedTime", DateTime.Now);
+                ReflectionHelper.SetPropValue(this, nameof(IDataTime.CreatedTime), DateTime.Now);
             }
         }
 
         public void SetUpdatedTime()
         {
-            if (ReflectionHelper.HasProperty(this, "UpdatedTime"))
+            if (ReflectionHelper.HasProperty(this, nameof(IDataTime.UpdatedTime)))
             {
-                ReflectionHelper.SetPropValue(this, "UpdatedTime", DateTime.Now);
+                ReflectionHelper.SetPropValue(this, nameof(IDataTime.UpdatedTime), DateTime.Now);
             }
         }
+    }
+
+    public interface IId
+    {
+        string Id { get; set; }
+    }
+
+    public interface IDataTime
+    {
+        DateTime CreatedTime { get; set; }
+        DateTime UpdatedTime { get; set; }
     }
 }

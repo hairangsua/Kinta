@@ -16,7 +16,7 @@ namespace Kinta.Persistence.Repositories
 
             if (connection.State != ConnectionState.Open)
             {
-                //TO DO: Cần WrappedConnection
+                //TODO: Cần WrappedConnection
                 connection.Open();
             }
 
