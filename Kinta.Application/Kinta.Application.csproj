@@ -21,4 +21,10 @@
     <ProjectReference Include="..\Kinta.Persistence\Kinta.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\WebApi\SharedLibs\AutoMapper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
