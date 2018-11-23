@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShareConfig", "ShareConfig"
 		ShareConfig\connections.json = ShareConfig\connections.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTestAuthentication", "ProjectTestAuthentication\ProjectTestAuthentication.csproj", "{F3BA5234-6D68-4F8B-87C2-C9BF996A65F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{26EEC97B-E2F2-442E-95BC-7334D17D2B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26EEC97B-E2F2-442E-95BC-7334D17D2B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26EEC97B-E2F2-442E-95BC-7334D17D2B1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3BA5234-6D68-4F8B-87C2-C9BF996A65F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3BA5234-6D68-4F8B-87C2-C9BF996A65F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3BA5234-6D68-4F8B-87C2-C9BF996A65F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3BA5234-6D68-4F8B-87C2-C9BF996A65F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,6 +98,7 @@ Global
 		{FE36485B-89C1-4267-9B2A-F5372FC00047} = {40B92155-C9A9-4F06-81F3-B59C35020EAA}
 		{C91C16BF-502E-469E-A0B9-366D312D9476} = {40B92155-C9A9-4F06-81F3-B59C35020EAA}
 		{26EEC97B-E2F2-442E-95BC-7334D17D2B1C} = {4189E59D-4E94-4661-BDAE-4F42A87C68E3}
+		{F3BA5234-6D68-4F8B-87C2-C9BF996A65F6} = {24BE6FA1-6069-4789-96CE-551B86D0A13B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B3F7660-563A-4FD7-8533-9DB8BF94FAF9}

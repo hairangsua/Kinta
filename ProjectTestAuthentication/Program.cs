@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Kinta
+namespace ProjectTestAuthentication
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            CreateWebHost(args).Run();
+            BuildWebHost(args).Run();
         }
 
-        public static IWebHost CreateWebHost(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>().UseUrls("https://localhost:4000").Build();
+                .UseStartup<Startup>()
+                .UseUrls("http://localhost:4001")
+                .Build();
     }
 }

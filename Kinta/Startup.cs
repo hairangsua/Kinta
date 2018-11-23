@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Logging;
 using Kinta.Application.BL;
+using System.Net;
 
 namespace Kinta
 {
@@ -77,7 +78,9 @@ namespace Kinta
                 };
             });
 
-            services.AddScoped<IUserService, UserService>();
+
+            services.AddSingleton<IUserService, UserService>();
+            //services.AddScoped<IUserService, UserService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -86,9 +89,7 @@ namespace Kinta
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
             //var assembly = typeof(GetAllCategoryQueryHandler).GetTypeInfo().Assembly;
-
-            var assembly = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains("Kinta.Application")).ToList();     //, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-            services.AddMediatR(assembly);
+            services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains("Kinta.Application")).ToList());
 
             // Customise default API behavour
             services.Configure<ApiBehaviorOptions>(option =>
@@ -96,11 +97,15 @@ namespace Kinta
                 option.SuppressModelStateInvalidFilter = true;
             });
 
+            //services.AddDbContext
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -112,16 +117,16 @@ namespace Kinta
 
             app.UseAuthentication();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //    app.UseDatabaseErrorPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Error");
+            //    app.UseHsts();
+            //}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
