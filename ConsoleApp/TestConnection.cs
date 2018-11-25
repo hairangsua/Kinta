@@ -1,9 +1,7 @@
-﻿using Kinta.Persistence.Repositories;
+﻿using Kinta.Framework.Data;
 using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace ConsoleApp
 {
@@ -24,7 +22,7 @@ namespace ConsoleApp
             {
                 using (var ts = con.BeginTransaction())
                 {
-               
+
                 }
             }
             //con.state = close after run out of using

@@ -1,10 +1,7 @@
-﻿using Kinta.Application.DAL;
-using Kinta.Models;
+﻿using Kinta.Bussiness.DAL;
+using Kinta.Framework.Bussiness;
 using Kinta.Models.Entities;
-using Kinta.Persistence.BaseBL;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Kinta.Application.BL
 {

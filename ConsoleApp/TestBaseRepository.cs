@@ -1,10 +1,6 @@
-﻿using Kinta.Persistence.Repositories;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using System.Data.Common;
-using System.Text;
-using static ConsoleApp.TestWhereBuilder;
 
 namespace ConsoleApp
 {

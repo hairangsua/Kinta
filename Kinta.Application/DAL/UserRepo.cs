@@ -1,18 +1,14 @@
-﻿using Kinta.Models;
-using Kinta.Models.Authentication;
-using Kinta.Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//using Kinta.Framework.Repository;
+//using Kinta.Models;
 
-namespace Kinta.Application.DAL
-{
-    public class UserRepo : BaseRepository<User>
-    {
-        public UserRepo() : base(DbConstant.KINTA_DB)
-        {
+//namespace Kinta.Application.DAL
+//{
+//    public class UserRepo : BaseRepository<User>
+//    {
+//        public UserRepo() : base(DbConstant.KINTA_DB)
+//        {
 
-        }
-    }
+//        }
+//    }
 
-}
+//}

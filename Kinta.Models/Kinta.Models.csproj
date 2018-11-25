@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="5.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Kinta.Common.csproj" />
-    <ProjectReference Include="..\Kinta.Domain\Kinta.Domain.csproj" />
+    <ProjectReference Include="..\Kinta.Framework\Kinta.Framework.csproj" />
   </ItemGroup>
 
 </Project>

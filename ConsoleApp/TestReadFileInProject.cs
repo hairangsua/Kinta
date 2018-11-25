@@ -1,10 +1,8 @@
-﻿using Kinta.Persistence.Repositories;
+﻿using Kinta.Framework.Data;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace ConsoleApp
 {

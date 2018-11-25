@@ -1,5 +1,5 @@
 ﻿using Kinta.Application.BL;
-using Kinta.Application.Command;
+using Kinta.Models.Command;
 using Kinta.Models.Entities;
 using MediatR;
 using System;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kinta.Application.Handle
+namespace Kinta.Bussiness.Handler
 {
     public class GetAllCategoryQueryHandler : IRequestHandler<GetAllCategoryQuery, List<CategoryModel>>
     {

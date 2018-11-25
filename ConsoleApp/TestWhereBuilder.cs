@@ -1,5 +1,5 @@
 ﻿using Common.SQLFromExpression;
-using Kinta.Domain.Attributes;
+using Kinta.Framework.Data.MappingAttributes;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;

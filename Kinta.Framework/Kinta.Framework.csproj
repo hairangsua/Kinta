@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\BaseRepository_UnitOfWork.cs" />
+    <Compile Remove="Data\BaseRepository_ver1.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="MySql.Data" Version="8.0.13" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Constant\" />
+    <Folder Include="BaseExceptions\" />
+  </ItemGroup>
+
+</Project>

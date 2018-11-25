@@ -1,5 +1,5 @@
-﻿using Kinta.Common.Helper;
-using Kinta.Domain.Attributes;
+﻿using Kinta.Framework.Data.MappingAttributes;
+using Kinta.Framework.Helper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
