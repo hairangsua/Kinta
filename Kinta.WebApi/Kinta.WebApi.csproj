@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions" Version="1.1.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="MediatR" Version="5.1.0" />
     <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="1.2.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.1.0" />
@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kinta.Application\Kinta.Bussiness.csproj" />
+    <ProjectReference Include="..\Kinta.AppShare\Kinta.AppShared.csproj" />
   </ItemGroup>
 
 </Project>
