@@ -5,12 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions" Version="1.1.0" />
     <PackageReference Include="MediatR" Version="5.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kinta.Models\Kinta.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Config\connections.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

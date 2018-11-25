@@ -16,7 +16,7 @@ namespace Kinta.Framework.Data
 
         public static ConnectionStringInfo GetConnectionByName(string dbName)
         {
-            var path = System.AppDomain.CurrentDomain.BaseDirectory.ToString() + @"Configuration\connections.json";
+            var path = System.AppDomain.CurrentDomain.BaseDirectory.ToString() + @"Config\connections.json";
             string text = File.ReadAllText(path);
             var connectionGroup = JSONHelper.Parse<ConnectionGroup>(text);
             var connectionInfos = connectionGroup.Connections;
