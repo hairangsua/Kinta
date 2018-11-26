@@ -1,117 +1,120 @@
-﻿//using System;
-//using System.Collections.Generic;
+﻿using Kinta.Bussiness.DAL;
+using Kinta.Framework.Helper;
+using Kinta.Models.Models;
+using System;
+using System.Collections.Generic;
 
-//namespace Kinta.Application.BL
-//{
-//    public class UserService : IUserService
-//    {
-//        //public UserRepo Repo { get { return _repo; } }
-//        private UserRepo _repo;
+namespace Kinta.Bussiness.BL
+{
+    public class UserBL
+    {
 
-//        public UserService()
-//        {
-//            _repo = new UserRepo();
-//        }
+        private UserRepo _repo;
 
-//        public User Authenticate(string username, string password)
-//        {
-//            if (username.IsEmpty() || password.IsEmpty())
-//            {
-//                return null;
-//            }
+        public UserBL()
+        {
+            _repo = new UserRepo();
+        }
 
-//            var user = _repo.SingleOrDefault(x => x.Username == username);
+        public User Authenticate(string username, string password)
+        {
+            if (username.IsEmpty() || password.IsEmpty())
+            {
+                return null;
+            }
 
-//            if (user == null)
-//            {
-//                return null;
-//            }
+            var user = _repo.SingleOrDefault(x => x.Username == username);
 
-//            throw new NotImplementedException();
-//        }
+            if (user == null)
+            {
+                return null;
+            }
 
-//        public User Create(User user, string password)
-//        {
-//            // validation
-//            if (password.IsNullOrWhiteSpace())
-//                throw new Exception("Password is required");
+            return user;
+        }
 
-//            var userName = user.Username;
-//            var existed = _repo.SingleOrDefault(x => x.Username == userName);
-//            if (existed != null)
-//                throw new Exception("Username \"" + user.Username + "\" is already taken");
+        public User Create(User user, string password)
+        {
+            // validation
+            if (password.IsNullOrWhiteSpace())
+                throw new Exception("Password is required");
 
-//            byte[] passwordHash, passwordSalt;
-//            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            var userName = user.Username;
+            var existed = _repo.SingleOrDefault(x => x.Username == userName);
+            if (existed != null)
+                throw new Exception("Username \"" + user.Username + "\" is already taken");
 
-//            user.PasswordHash = passwordHash;
-//            user.PasswordSalt = passwordSalt;
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-//            _repo.Insert(user);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
 
-//            return user;
-//        }
+            _repo.Insert(user);
 
-//        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-//        {
-//            if (password == null) throw new ArgumentNullException("password");
-//            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+            return user;
+        }
 
-//            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-//            {
-//                passwordSalt = hmac.Key;
-//                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-//            }
-//        }
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
 
-//        public void Delete(string id)
-//        {
-//            throw new NotImplementedException();
-//        }
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
 
-//        public IEnumerable<User> GetAll()
-//        {
-//            throw new NotImplementedException();
-//        }
+        public void Delete(string id)
+        {
+            throw new NotImplementedException();
+        }
 
-//        public User GetById(int id)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public IEnumerable<User> GetAll()
+        {
+            throw new NotImplementedException();
+        }
 
-//        public void Update(User user, string password = null)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public User GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
 
-//        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
-//        {
-//            if (password.IsEmpty())
-//            {
-//                throw new ArgumentNullException(nameof(password));
-//            }
+        public void Update(User user, string password = null)
+        {
+            throw new NotImplementedException();
+        }
 
-//            if (password.IsNullOrWhiteSpace())
-//            {
-//                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
-//            }
+        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        {
+            if (password.IsEmpty())
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
 
-//            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-//            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+            if (password.IsNullOrWhiteSpace())
+            {
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
+            }
 
-//            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
-//            {
-//                var computerHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-//                for (int i = 0; i < computerHash.Length; i++)
-//                {
-//                    if (computerHash[i] != storedHash[i])
-//                    {
-//                        return false;
-//                    }
-//                }
-//            }
+            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
 
-//            return true;
-//        }
-//    }
-//}
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            {
+                var computerHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < computerHash.Length; i++)
+                {
+                    if (computerHash[i] != storedHash[i])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+}

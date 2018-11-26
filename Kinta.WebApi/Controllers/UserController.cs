@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace Kinta.Web.Controllers
 {
     [Authorize]
-    public class UserController : BaseController
+    public class UserController : ControllerBase
     {
         private IUserService _userService;
         private IMapper _mapper;
@@ -35,22 +35,18 @@ namespace Kinta.Web.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [ProducesResponseType(typeof(IEnumerable<User>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Register([FromQuery] SignUpCommand command)
+        public IActionResult Create([FromBody]UserDTO userDTO)
         {
-            command.UserDTO = new UserDTO
+            return Ok(_userService.Create(new User
             {
-                Id = 1232,
-                DisplayName = "Hải Hoàng Phi",
-                FirstName = "Hải",
-                LastName = "Hoàng Phi",
-                Password = "123456",
-                Username = "hai123"
-            };
-            return Ok(await Mediator.Send(command));
+                Id = userDTO.Id,
+                DisplayName = userDTO.DisplayName,
+                FirstName = userDTO.FirstName,
+                LastName = userDTO.LastName,
+                Username = userDTO.Username
+            }, userDTO.Password));
         }
+
 
         [AllowAnonymous]
         [HttpPost("authenticate")]

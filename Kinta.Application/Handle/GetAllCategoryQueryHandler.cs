@@ -1,4 +1,4 @@
-﻿using Kinta.Application.BL;
+﻿using Kinta.Bussiness.BL;
 using Kinta.Models.Command;
 using Kinta.Models.Entities;
 using MediatR;

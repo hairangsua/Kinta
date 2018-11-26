@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Kinta.Application.Infastructure;
+using Kinta.AppShared;
 using Kinta.Framework.Data.Entity;
+using Kinta.WebApi.Services;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -88,6 +90,7 @@ namespace Kinta.WebApi
                 option.SuppressModelStateInvalidFilter = true;
             });
 
+            services.AddScoped<IUserService, UserService>();
 
         }
 

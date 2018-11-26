@@ -3,7 +3,7 @@ using Kinta.Framework.Bussiness;
 using Kinta.Models.Entities;
 using System.Collections.Generic;
 
-namespace Kinta.Application.BL
+namespace Kinta.Bussiness.BL
 {
     public class CategoryBL : BaseBL<CategoryModel, CategoryRepo>
     {

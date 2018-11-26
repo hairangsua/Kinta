@@ -1,14 +1,15 @@
-﻿//using Kinta.Framework.Repository;
-//using Kinta.Models;
+﻿using Kinta.Framework.Repository;
+using Kinta.Models;
+using Kinta.Models.Models;
 
-//namespace Kinta.Application.DAL
-//{
-//    public class UserRepo : BaseRepository<User>
-//    {
-//        public UserRepo() : base(DbConstant.KINTA_DB)
-//        {
+namespace Kinta.Bussiness.DAL
+{
+    public class UserRepo : BaseRepository<User>
+    {
+        public UserRepo() : base(DbConstant.KINTA_DB)
+        {
 
-//        }
-//    }
+        }
+    }
 
-//}
+}
