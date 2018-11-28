@@ -1,5 +1,12 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using Kinta.Models.Command;
+using Kinta.Models.Models;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 namespace Kinta.Controllers
 {
@@ -11,9 +18,21 @@ namespace Kinta.Controllers
 
         protected IMediator Mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
 
-        public void authTEst()
+        public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            ControllerContext.
+            var task = base.OnActionExecutionAsync(context, next);
+
+            return task;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            base.OnActionExecuted(context);
         }
     }
 }

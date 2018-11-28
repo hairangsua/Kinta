@@ -2,25 +2,41 @@
 using Kinta.Controllers;
 using Kinta.Models.Command;
 using Kinta.Models.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kinta.WebApi.Services
 {
-    public class UserService : BaseController, IUserService
+    public class UserService : IUserService
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        //public UserService()
+        //{
+
+        //}
+        private IMediator _mediator;
+        public UserService(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+            _mediator = _httpContextAccessor.HttpContext.RequestServices.GetService<IMediator>();
+        }
+
         //[AllowAnonymous]
         public User Authenticate(string username, string password)
         {
             var command = new AuthenticateCommand();
             command.Username = username;
             command.Password = password;
-            return Mediator.Send(command).Result;
+            return _mediator.Send(command).Result;
         }
 
         //[AllowAnonymous]
@@ -39,7 +55,7 @@ namespace Kinta.WebApi.Services
                 Password = password,
                 Username = user.Username
             };
-            return Mediator.Send(command).Result;
+            return _mediator.Send(command).Result;
         }
 
         public void Delete(int id)
