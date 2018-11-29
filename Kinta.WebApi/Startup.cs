@@ -44,11 +44,12 @@ namespace Kinta.WebApi
             //configue jwt authentication
             //var appsettings = appSettingsSection.Get<AppSettings>();
             //var key = Encoding.ASCII.GetBytes(appsettings.Secret);
-            //services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(x =>
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer();
+            //.AddJwtBearer(x =>
             //{
             //    x.Events = new JwtBearerEvents
             //    {

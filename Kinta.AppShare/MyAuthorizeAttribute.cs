@@ -30,8 +30,14 @@ namespace Kinta.AppShared.Authorize
 
             _userService = context.HttpContext.RequestServices.GetService<IUserService>();
 
-            var a = _userService.Authenticate("", "");
-            //throw new NotImplementedException();
+            //var userId = int.Parse(context.Principal.Identity.Name);
+            //var user = userService.GetById(userId);
+            //if (user == null)
+            //{
+            //    // return unauthorized if user no longer exists
+            //    context.Fail("Unauthorized");
+            //}
+            //return Task.CompletedTask;
         }
 
         public void OnResourceExecuted(ResourceExecutedContext context)

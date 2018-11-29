@@ -20,9 +20,7 @@ namespace Kinta.Controllers
 
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var task = base.OnActionExecutionAsync(context, next);
-
-            return task;
+            return base.OnActionExecutionAsync(context, next);
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
