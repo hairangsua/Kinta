@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Kinta.Models.Command
 {
-    public class AuthenticateCommand : IRequest<User>
+    public class AuthenticateCommand : IRequest<AuthenticateResult>
     {
         public string Username { get; set; }
         public string Password { get; set; }

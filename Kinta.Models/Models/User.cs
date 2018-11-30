@@ -10,7 +10,7 @@ namespace Kinta.Models.Models
     public class User : BaseModel
     {
         [DbColumn(Name = "id")]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [DbColumn(Name = "first_name")]
         public string FirstName { get; set; }
@@ -33,11 +33,17 @@ namespace Kinta.Models.Models
 
     public class UserDTO
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+    }
+
+    public class AuthenticateResult
+    {
+        public User User { get; set; }
+        public string Token { get; set; }
     }
 }
