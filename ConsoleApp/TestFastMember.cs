@@ -1,4 +1,5 @@
 ﻿using FastMember;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,9 +12,13 @@ namespace ConsoleApp
         {
             public string Code { get; set; }
 
+            [JsonIgnore]
             public int Age { get; set; }
 
+            [JsonIgnore]
             public DateTime BirthDate { get; set; }
+
+            public string[] Objectives { get; set; }
         }
 
         public static void InitTest()
