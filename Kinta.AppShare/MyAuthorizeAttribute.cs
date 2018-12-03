@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
@@ -26,9 +25,17 @@ namespace Kinta.AppShared.Authorize
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            var b = context.HttpContext;
+            try
+            {
+                var b = context.HttpContext;
 
-            _userService = context.HttpContext.RequestServices.GetService<IUserService>();
+                _userService = context.HttpContext.RequestServices.GetService<IUserService>();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             //var userId = int.Parse(context.Principal.Identity.Name);
             //var user = userService.GetById(userId);

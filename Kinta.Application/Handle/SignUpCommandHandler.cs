@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Kinta.Bussiness.Handler
 {
-    public class SignUpCommandHandler : IRequestHandler<SignUpCommand, User>
+    public class SignUpCommandHandler : IRequestHandler<UserSignUpCommand, User>
     {
-        public Task<User> Handle(SignUpCommand request, CancellationToken cancellationToken)
+        public Task<User> Handle(UserSignUpCommand request, CancellationToken cancellationToken)
         {
             try
             {

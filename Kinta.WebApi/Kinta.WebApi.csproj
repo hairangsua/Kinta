@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Serives\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -24,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Kinta.Application\Kinta.Bussiness.csproj" />
     <ProjectReference Include="..\Kinta.AppShare\Kinta.AppShared.csproj" />
+    <ProjectReference Include="..\Kinta.Auth\Kinta.Auth.csproj" />
   </ItemGroup>
 
 </Project>

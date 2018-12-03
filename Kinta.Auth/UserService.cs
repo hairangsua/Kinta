@@ -1,28 +1,18 @@
 ﻿using Kinta.AppShared;
-using Kinta.Controllers;
 using Kinta.Models.Command;
 using Kinta.Models.Models;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Kinta.WebApi.Services
+namespace Kinta.Auth.Services
 {
     public class UserService : IUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        //public UserService()
-        //{
-
-        //}
         private IMediator _mediator;
         public UserService(IHttpContextAccessor httpContextAccessor)
         {
@@ -30,21 +20,17 @@ namespace Kinta.WebApi.Services
             _mediator = _httpContextAccessor.HttpContext.RequestServices.GetService<IMediator>();
         }
 
-        //[AllowAnonymous]
         public User Authenticate(string username, string password)
         {
-            var command = new AuthenticateCommand();
+            var command = new UserAuthenticateCommand();
             command.Username = username;
             command.Password = password;
-            return _mediator.Send(command).Result;
+            return _mediator.Send(command).Result.User;
         }
 
-        //[AllowAnonymous]
-        //[HttpPost]
-        //[ProducesResponseType(typeof(IEnumerable<User>), (int)HttpStatusCode.OK)]
         public User Create(User user, string password)
         {
-            SignUpCommand command = new SignUpCommand();
+            UserSignUpCommand command = new UserSignUpCommand();
 
             command.UserDTO = new UserDTO
             {
@@ -68,9 +54,10 @@ namespace Kinta.WebApi.Services
             throw new NotImplementedException();
         }
 
-        public User GetById(int id)
+        public User GetById(string id)
         {
-            throw new NotImplementedException();
+            var rs = _mediator.Send(new UserGetByIdCommand { Id = id });
+            return rs.Result;
         }
 
         public void Update(User user, string password = null)

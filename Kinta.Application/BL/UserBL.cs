@@ -1,6 +1,7 @@
 ﻿using Kinta.Bussiness.DAL;
 using Kinta.Framework;
 using Kinta.Framework.BaseExceptions;
+using Kinta.Framework.Exceptions;
 using Kinta.Framework.Helper;
 using Kinta.Models.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -106,9 +107,14 @@ namespace Kinta.Bussiness.BL
             throw new NotImplementedException();
         }
 
-        public User GetById(int id)
+        public User GetById(string id)
         {
-            throw new NotImplementedException();
+            if (id.IsEmpty())
+            {
+                throw new Exception("Id Không tồn tại trong hệ thống");
+            }
+
+            return _repo.SingleOrDefault(x => x.Id == id);
         }
 
         public void Update(User user, string password = null)

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Kinta.Bussiness.Handler
 {
-    public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, User>
+    public class UserAuthenticateCommandHandler : IRequestHandler<UserAuthenticateCommand, AuthenticateResult>
     {
-        public Task<User> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
+        public Task<AuthenticateResult> Handle(UserAuthenticateCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -18,7 +18,9 @@ namespace Kinta.Bussiness.Handler
 
                 //var user = Mapper.Map<User>(request.UserDTO);
 
-                return Task.FromResult(bl.Authenticate(request.Username, request.Password));
+                var rs = bl.Authenticate(request.Username, request.Password);
+
+                return Task.FromResult(rs);
             }
             catch (Exception)
             {
