@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Kinta.Models.Command
 {
-    public class UserSignUpCommand : IRequest<User>
+    public class UserRegisterCommand : IRequest<User>
     {
         public UserDTO UserDTO { get; set; }
     }

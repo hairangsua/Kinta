@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Kinta.Bussiness.Handler
 {
-    public class SignUpCommandHandler : IRequestHandler<UserSignUpCommand, User>
+    public class SignUpCommandHandler : IRequestHandler<UserRegisterCommand, User>
     {
-        public Task<User> Handle(UserSignUpCommand request, CancellationToken cancellationToken)
+        public Task<User> Handle(UserRegisterCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace Kinta.Bussiness.Handler
                     Username = request.UserDTO.Username
                 };
 
-                return Task.FromResult(bl.Create(user, request.UserDTO.Password));
+                return Task.FromResult(bl.Register(user, request.UserDTO.Password));
             }
             catch (Exception)
             {

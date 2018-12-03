@@ -30,7 +30,7 @@ namespace Kinta.Auth.Services
 
         public User Create(User user, string password)
         {
-            UserSignUpCommand command = new UserSignUpCommand();
+            UserRegisterCommand command = new UserRegisterCommand();
 
             command.UserDTO = new UserDTO
             {

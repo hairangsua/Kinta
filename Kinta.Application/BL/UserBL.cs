@@ -63,7 +63,7 @@ namespace Kinta.Bussiness.BL
             return rs;
         }
 
-        public User Create(User user, string password)
+        public User Register(User user, string password)
         {
             // validation
             if (password.IsNullOrWhiteSpace())

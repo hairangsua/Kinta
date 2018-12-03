@@ -30,17 +30,12 @@ namespace Kinta.Web.Controllers
 
         //}
 
-        //public IActionResult Create([FromBody]UserDTO userDTO)
-        //{
-        //    return Ok(_userService.Create(new User
-        //    {
-        //        Id = userDTO.Id,
-        //        DisplayName = userDTO.DisplayName,
-        //        FirstName = userDTO.FirstName,
-        //        LastName = userDTO.LastName,
-        //        Username = userDTO.Username
-        //    }, userDTO.Password));
-        //}
+        [HttpPost]
+        [ProducesResponseType(typeof(IEnumerable<UserDTO>), (int)HttpStatusCode.OK)]
+        public IActionResult Register([FromBody] UserRegisterCommand cmd)
+        {
+            return Ok(Mediator.Send(cmd));
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(IEnumerable<UserDTO>), (int)HttpStatusCode.OK)]
