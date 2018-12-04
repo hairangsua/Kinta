@@ -8,7 +8,7 @@ using Kinta.AppShared.Authorize;
 
 namespace Kinta.Controllers
 {
-    //[MyServiceAuthorize]
+    [MyServiceAuthorize]
     public class CategoriesController : BaseController
     {
         [HttpGet]

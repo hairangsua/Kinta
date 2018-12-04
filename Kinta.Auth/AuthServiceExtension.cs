@@ -11,14 +11,12 @@ namespace Kinta.Auth.Extension
 {
     public static class AuthServiceExtension
     {
-        const string SecretKey = "xkc!@#dsm89d1283jd8asdsAD@#$qdasdh1312#2^dsad@";
         public static void InitAuthService(this IServiceCollection services)
         {
             try
             {
                 services.AddScoped<IUserService, UserService>();
 
-                var key = Encoding.ASCII.GetBytes(SecretKey);
                 services.AddAuthentication(x =>
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,7 +43,7 @@ namespace Kinta.Auth.Extension
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthConstant.SecretKey)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };

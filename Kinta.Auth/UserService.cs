@@ -20,12 +20,12 @@ namespace Kinta.Auth.Services
             _mediator = _httpContextAccessor.HttpContext.RequestServices.GetService<IMediator>();
         }
 
-        public User Authenticate(string username, string password)
+        public AuthenticateResult Authenticate(string username, string password)
         {
             var command = new UserAuthenticateCommand();
             command.Username = username;
             command.Password = password;
-            return _mediator.Send(command).Result.User;
+            return _mediator.Send(command).Result;
         }
 
         public User Create(User user, string password)

@@ -7,7 +7,7 @@ namespace Kinta.AppShared
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
+        AuthenticateResult Authenticate(string username, string password);
         IEnumerable<User> GetAll();
         User GetById(string id);
         User Create(User user, string password);
