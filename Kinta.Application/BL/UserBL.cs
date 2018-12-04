@@ -38,7 +38,7 @@ namespace Kinta.Bussiness.BL
                 throw new AuthenticateException("username is not existed");
             }
 
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPasswordHash(password, user.PasswordSalt, user.PasswordHash))
             {
                 throw new AuthenticateException("username or password not match");
             }
@@ -93,7 +93,7 @@ namespace Kinta.Bussiness.BL
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
                 passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }
         }
 
@@ -122,7 +122,7 @@ namespace Kinta.Bussiness.BL
             throw new NotImplementedException();
         }
 
-        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        private static bool VerifyPasswordHash(string password, byte[] storedSalt, byte[] storedHash)
         {
             if (password.IsEmpty())
             {
@@ -134,15 +134,15 @@ namespace Kinta.Bussiness.BL
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
             }
 
-            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+            if (storedSalt.Length != 64) throw new ArgumentException("Invalid length of password salt (64 bytes expected).", "passwordSalt");
+            if (storedHash.Length != 128) throw new ArgumentException("Invalid length of password hash (128 bytes expected).", "passwordHash");
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedHash))
             {
-                var computerHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computerHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computerHash.Length; i++)
                 {
-                    if (computerHash[i] != storedHash[i])
+                    if (computerHash[i] != storedSalt[i])
                     {
                         return false;
                     }
