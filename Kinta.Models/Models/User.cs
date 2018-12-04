@@ -7,7 +7,7 @@ using System.Text;
 namespace Kinta.Models.Models
 {
     [DbName("user")]
-    public class User : BaseModel
+    public class User : BaseModel, IUserProfile
     {
         [DbColumn(Name = "id")]
         public string Id { get; set; }
@@ -31,7 +31,7 @@ namespace Kinta.Models.Models
         public byte[] PasswordSalt { get; set; }
     }
 
-    public class UserDTO
+    public class UserDTO : IUserProfile
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -41,9 +41,18 @@ namespace Kinta.Models.Models
         public string Password { get; set; }
     }
 
+    public interface IUserProfile
+    {
+        string Id { get; set; }
+        string FirstName { get; set; }
+        string LastName { get; set; }
+        string DisplayName { get; set; }
+        string Username { get; set; }
+    }
+
     public class AuthenticateResult
     {
-        public User User { get; set; }
+        public IUserProfile User { get; set; }
         public string Token { get; set; }
     }
 }
