@@ -42,7 +42,7 @@ namespace Kinta.Bussiness.BL
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(/*AuthConstant.SecretKey*/ "");
+            var key = Encoding.ASCII.GetBytes(/*AuthConstant.SecretKey*/ "38BF1139-2249-4C9D-9A9C-DD73D4E3A054");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

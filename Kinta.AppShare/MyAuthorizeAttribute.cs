@@ -6,50 +6,55 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Kinta.Models.Command;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Kinta.Framework.Helper;
 
 namespace Kinta.AppShared.Authorize
 {
     public class MyServiceAuthorizeAttribute : Attribute, IResourceFilter
     {
 
-        private IUserService _userService;
         public MyServiceAuthorizeAttribute()
         {
 
         }
 
-        public MyServiceAuthorizeAttribute(IUserService userService)
+        private string Permission { get; set; }
+        private bool IsLogged { get; set; }
+
+        public MyServiceAuthorizeAttribute(string permission)
         {
-            _userService = userService;
+            Permission = permission;
         }
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
             try
             {
-                var b = context.HttpContext;
-
-                _userService = context.HttpContext.RequestServices.GetService<IUserService>();
+                IsLogged = context.HttpContext.User.Identity.Name.IsNotEmpty();
+                if (!IsLogged)
+                {
+                    throw new UnauthorizedAccessException();
+                }
+                bool hasPermission = true;
+                if (!hasPermission)
+                {
+                    //TODO: Add Exceoption if dont have permission 
+                    throw new Exception("Access denied!");
+                }
             }
             catch (Exception)
             {
-
                 throw;
             }
-
-            //var userId = int.Parse(context.Principal.Identity.Name);
-            //var user = userService.GetById(userId);
-            //if (user == null)
-            //{
-            //    // return unauthorized if user no longer exists
-            //    context.Fail("Unauthorized");
-            //}
-            //return Task.CompletedTask;
         }
 
         public void OnResourceExecuted(ResourceExecutedContext context)
         {
-            throw new NotImplementedException();
+            //TODO: Log here
         }
+
+
+
     }
 }

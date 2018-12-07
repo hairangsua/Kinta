@@ -36,9 +36,23 @@ namespace Kinta.Auth.Extension
                                 context.Fail("Unauthorized");
                             }
                             return Task.CompletedTask;
+                        },
+                        OnMessageReceived = context =>
+                        {
+                            //TODO: log here
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            //context.Fail("Token invalid");
+                            return Task.CompletedTask;
+                        },
+                        OnChallenge = context =>
+                        {
+                            return Task.CompletedTask;
                         }
                     };
-                    x.RequireHttpsMetadata = false;
+                    x.RequireHttpsMetadata = false; // TRUE ON PRODUCT
                     x.SaveToken = true;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {

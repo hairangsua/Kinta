@@ -7,6 +7,6 @@ namespace Kinta.Auth
 {
     public class AuthConstant
     {
-        public const string SecretKey = "xkc!@#dsm89d1283jd8asdsAD@#$qdasdh1312#2^dsad@";
+        public const string SecretKey = "38BF1139-2249-4C9D-9A9C-DD73D4E3A054";
     }
 }
