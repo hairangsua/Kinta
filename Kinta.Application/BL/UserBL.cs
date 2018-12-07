@@ -1,8 +1,5 @@
-﻿using Kinta.Auth;
-using Kinta.Bussiness.DAL;
-using Kinta.Framework;
+﻿using Kinta.Bussiness.DAL;
 using Kinta.Framework.BaseExceptions;
-using Kinta.Framework.Exceptions;
 using Kinta.Framework.Helper;
 using Kinta.Models.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -45,7 +42,7 @@ namespace Kinta.Bussiness.BL
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(AuthConstant.SecretKey);
+            var key = Encoding.ASCII.GetBytes(/*AuthConstant.SecretKey*/ "");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
