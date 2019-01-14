@@ -1,4 +1,5 @@
-﻿using FastMember;
+﻿using ConsoleApp.FunctionDynamicOption;
+using FastMember;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            TestJsonStringify.InitTest();
+            DynamicOption.Run();
         }
 
 
