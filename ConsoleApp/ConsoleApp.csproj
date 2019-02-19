@@ -9,6 +9,7 @@
     <PackageReference Include="AutoMapper.Extensions" Version="1.1.0" />
     <PackageReference Include="FastMember.NetCore" Version="1.1.0" />
     <PackageReference Include="FluentValidation" Version="8.0.100" />
+    <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
     <PackageReference Include="MediatR" Version="5.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="SqlKata" Version="1.1.3" />
