@@ -36,9 +36,9 @@ namespace ConsoleApp
     {
         public static void Run()
         {
-            var date = FirstDayOfWeekUtility.GetFirstDayOfWeek(new DateTime(2019, 2, 2));
+            //var date = FirstDayOfWeekUtility.GetFirstDayOfWeek(new DateTime(2019, 2, 2));
 
-             var w = GetRange(2019, 2);
+            var w = GetRange(2019, 2);
         }
 
         public static List<Week> GetRange(int year, int month)
@@ -49,15 +49,18 @@ namespace ConsoleApp
 
             var weeks = new List<Week>();
 
-            var startDate = DateTime.MinValue;
-            var endDate = DateTime.MinValue;
+            var startDate = start;
             for (DateTime date = start; date <= end; date = date.AddDays(1))
             {
-                startDate = start;
-
                 if (date.DayOfWeek == DayOfWeek.Sunday)
                 {
-                    weeks.Add(new Week(date));
+                    weeks.Add(new Week(startDate, date));
+                    startDate = date.AddDays(1);
+                }
+
+                if (date.Day == end.Day)
+                {
+                    weeks.Add(new Week(startDate, date));
                 }
             }
 
@@ -66,13 +69,14 @@ namespace ConsoleApp
 
         public class Week
         {
-            public DateTime Start { get; private set; }
+            public DateTime Start { get; set; }
 
-            public DateTime End { get { return Start.AddDays(6); } }
+            public DateTime End { get; set; }
 
-            public Week(DateTime start)
+            public Week(DateTime start, DateTime end)
             {
                 Start = start;
+                End = end;
             }
         }
     }
