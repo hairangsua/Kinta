@@ -9,7 +9,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            DynamicOption.Run();
+            ValidConsoleInput.Run();
         }
 
 
