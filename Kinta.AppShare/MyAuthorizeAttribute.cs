@@ -6,7 +6,6 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Kinta.Models.Command;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Kinta.Framework.Helper;
 
 namespace Kinta.AppShared.Authorize
